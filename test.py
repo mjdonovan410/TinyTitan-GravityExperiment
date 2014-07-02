@@ -5,7 +5,6 @@ from pygame.locals import *
 import os, sys
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = str(75) + "," + str(30)
-
 pygame.init()
 
 # Screen and System Variables
@@ -21,8 +20,6 @@ frames = []
 mouseOnPic = False
 crosshairs = [pygame.image.load("Images/crosshairs_w.png"),pygame.image.load("Images/crosshairs_h.png")]
 keyFrames = []
-
-#frames = button_pressed(screen,None,"load",frame_range)
 
 # Buttons for rendering
 buttons = []
@@ -54,9 +51,7 @@ while True:
 		
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			os.system("rm ./ffmpeg_temp/*.jpg")
-			pygame.quit()
-			sys.exit()
+			exitAndClean()
 		elif event.type == KEYDOWN:
 			if event.key == K_LEFT:
 				curFrame = left_key(curFrame,frame_range)
@@ -70,9 +65,7 @@ while True:
 			elif event.key == K_c:
 				frame_range = [0,len(frames)-1]
 			elif event.key == 27:
-				os.system("rm ./ffmpeg_temp/*.jpg")
-				pygame.quit()
-				sys.exit()
+				exitAndClean()
 		elif event.type == MOUSEBUTTONDOWN:
 			x,y = event.pos
 			for i in buttons:
@@ -88,6 +81,7 @@ while True:
 							label = font.render(str(curFrame),1,(255,255,255))
 							screen.blit(frames[curFrame],(screen_w-(pic_size[0]+10),10))
 							screen.blit(label,(screen_w-(pic_size[0]+5),15))
+							curFrame = 0
 					if buttstr in ['stepf','stepb','skipf','skipb','start','end']:
 						curFrame = temp
 				
@@ -110,7 +104,5 @@ while True:
 	pygame.display.update()
 	clock.tick(FPS)
 
-os.system("rm ./ffmpeg_temp/*.jpg")
-pygame.quit()
-sys.exit()
+exitAndClean()
 				
