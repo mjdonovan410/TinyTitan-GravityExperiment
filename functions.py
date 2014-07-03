@@ -38,12 +38,12 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 		if infile != '':
 			cleanDir()
-			font = pygame.font.SysFont("sanserif",108)
-			label = font.render("PLEASE WAIT",1,(255,0,0))
-			screen.blit(label,(100,300))
+			font = pygame.font.SysFont("sanserif",72)
+			label = font.render("LOADING",1,(255,0,0))
+			screen.blit(label,(350,300))
 			pygame.display.update()
 			os.system("mkdir ffmpeg_temp")
-			frames = change_vid(infile)
+			frames = change_vid(infile, screen)
 			screen.blit(pygame.image.load("Images/bg.png"),(0,0))
 			screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
 			return frames	
@@ -53,12 +53,22 @@ def button_pressed(screen,curFrame,str,frame_range):
 		return frame_range[1]
 		
 		
-def change_vid(infile):
+def change_vid(infile, screen):
 	os.system("ffmpeg -i "+infile+" -r 25 -f image2 ffmpeg_temp/%05d.jpg")
 	path, dirs, files = os.walk("./ffmpeg_temp/").next()
 	frames = []
+	length = len(files)
+	bar = pygame.image.load("Images/loading.png")
+	c = 1
+	v = 0
 	for i in files:
 		frames.append(pygame.image.load("./ffmpeg_temp/"+i))
+		if (v*100/length) > c:
+			screen.blit(bar,(310+c*3,350))
+			pygame.display.update()
+			c += 1
+		v += 1
+		#print str(v*100/length) + " - " + str(c)
 	return frames
 	
 def exitAndClean():

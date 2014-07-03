@@ -67,7 +67,7 @@ while True:
 				exitAndClean()
 		elif event.type == MOUSEBUTTONDOWN:
 			x,y = event.pos
-			if mouseOnPic:
+			if mouseOnPic and frames != []:
 				keyFrames[curFrame] = (x-screen_size[0]+(frame_size[0]+10),y-10)
 			else:
 				for i in buttons:
