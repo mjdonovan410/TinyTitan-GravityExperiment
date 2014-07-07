@@ -23,15 +23,15 @@ def button_pressed(screen,curFrame,str,frame_range):
 	elif str == "stepb":
 		return left_key(curFrame,frame_range)
 	elif str == "skipf":
-		if curFrame+(FPS/2) >= frame_range[1]:
+		if curFrame+(FPS/4) >= frame_range[1]:
 			return frame_range[1]
 		else:
-			return curFrame+(FPS/2)
+			return curFrame+(FPS/4)
 	elif str == "skipb":
-		if curFrame-(FPS/2) <= frame_range[0]:
+		if curFrame-(FPS/4) <= frame_range[0]:
 			return frame_range[0]
 		else:
-			return curFrame-(FPS/2)
+			return curFrame-(FPS/4)
 	elif str == "load":
 		Tk().withdraw()
 		infile = askopenfilename(filetypes=[("H264 Video","*.h264")])
@@ -59,8 +59,8 @@ def change_vid(infile, screen):
 	frames = []
 	length = len(files)
 	bar = pygame.image.load("Images/loading.png")
-	c = 1
-	v = 0
+	c = 1; v = 0
+	files.sort()
 	for i in files:
 		frames.append(pygame.image.load("./ffmpeg_temp/"+i))
 		if (v*100/length) > c:
@@ -68,7 +68,6 @@ def change_vid(infile, screen):
 			pygame.display.update()
 			c += 1
 		v += 1
-		#print str(v*100/length) + " - " + str(c)
 	return frames
 	
 def exitAndClean():
@@ -113,17 +112,22 @@ def update_pic(screen, screen_size, frames, frame_loc, curFrame, font):
 	screen.blit(frames[curFrame],frame_loc)
 	screen.blit(frame_num,(frame_loc[0]+5,frame_loc[1]+5))
 	
-def show_all_points(screen, keyFrames, frame_range, frame_loc, curFrame, dot, dot2):
+def show_all_points(screen, keyFrames, frame_range, frame_loc, curFrame, dotR, dotB):
 	for i in range(frame_range[0], frame_range[1]):
 		p = keyFrames[i]
 		if p != (1000,1000):
 			temp = p
 			if i == curFrame:
-				screen.blit(dot2,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
+				screen.blit(dotB,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
 			else:
-				screen.blit(dot,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
+				screen.blit(dotR,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
 	
-	
+def clear_points(keyFrames):
+	length = len(keyFrames)
+	keyFrames = []
+	for i in range(length):
+		keyFrames.append((1000,1000))
+	return keyFrames
 	
 	
 	

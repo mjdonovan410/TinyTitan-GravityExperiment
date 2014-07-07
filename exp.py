@@ -15,8 +15,8 @@ frame_size = (480,640)
 frame_loc = (screen_size[0]-(frame_size[0]+10),10)
 frames = []
 crosshairs = [pygame.image.load("Images/crosshairs_w.png"),pygame.image.load("Images/crosshairs_h.png")]
-dot = pygame.image.load("Images/dotr.png").convert_alpha()
-dot2 = pygame.image.load("Images/dotb.png").convert_alpha()
+dotR = pygame.image.load("Images/dotr.png").convert_alpha()
+dotB = pygame.image.load("Images/dotb.png").convert_alpha()
 font = pygame.font.SysFont("sanserif",36)
 curFrame = 0
 keyFrames = []
@@ -58,9 +58,8 @@ while True:
 				frame_range[0] = curFrame
 				button_str = "set_start"
 			elif event.key == K_f:
-				if frame_range[0] < curFrame:
-					frame_range[1] = curFrame
-					button_str = "set_end"
+				frame_range[1] = curFrame
+				button_str = "set_end"
 			elif event.key == K_c:
 				frame_range = [0,len(frames)-1]
 			elif event.key == 27:
@@ -88,8 +87,7 @@ while True:
 							elif button_str == 'set_start':
 								frame_range[0] = curFrame
 							elif button_str == 'set_end':
-								if frame_range[0] < curFrame:
-									frame_range[1] = curFrame
+								frame_range[1] = curFrame
 							elif button_str == 'show':
 								i.toggle_button()
 								if showPoints:
@@ -114,8 +112,8 @@ while True:
 									message_str = "File "+filename+" successfully saved"
 									
 							elif button_str == 'clear':
-								for p in keyFrames:
-									p = (1000,1000)
+								keyFrames = clear_points(keyFrames)
+								update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
 	
 	frame_num = font.render(str(curFrame),1,(255,255,255))
 	
@@ -123,7 +121,7 @@ while True:
 		update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
 		if keyFrames[curFrame] != (1000,1000):
 			temp = keyFrames[curFrame]
-			screen.blit(dot,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
+			screen.blit(dotR,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
 	
 	if button_str in ["set_end","set_start"] and frames != []:
 		update_all(screen, screen_size, frames, frame_loc, frame_range, curFrame, font)
@@ -132,15 +130,17 @@ while True:
 
 	if mouseOnPic:
 		if frames != []:
+			crosshair_loc = font.render("("+str((x-screen_size[0]+(frame_size[0]+10)))+","+str(y-10)+")",1,(255,255,255))
 			update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
 			screen.blit(crosshairs[1],(x,10))
 			screen.blit(crosshairs[0],(screen_size[0]-(frame_size[0]+10),y))
+			screen.blit(crosshair_loc,(screen_size[0]-(frame_size[0]),screen_size[1]-100))
 	
 	if showPoints:
-		show_all_points(screen, keyFrames, frame_range, frame_loc, curFrame, dot, dot2)
+		show_all_points(screen, keyFrames, frame_range, frame_loc, curFrame, dotR, dotB)
 	elif frames != [] and keyFrames[curFrame] != (1000,1000):
 		temp = keyFrames[curFrame]
-		screen.blit(dot,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
+		screen.blit(dotR,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
 	
 	if message:
 		message_convert = font.render(message_str,1,(255,0,0))
