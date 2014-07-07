@@ -94,22 +94,9 @@ while True:
 									showPoints = False
 								else:
 									showPoints = True
+								update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
 							elif button_str == 'save':
-								temp = []
-								for i in range(frame_range[0], frame_range[1]):
-									p = keyFrames[i]
-									if p != (1000,1000):
-										temp.append((p,i*1/90))
-									else:
-										message_str = "Frame "+str(i)+" missing data point"
-										message = True
-										curFrame = i
-										break
-								if not message:
-									pickle.dump(temp,open("save.p", "wb"))
-									message = True
-									filename = "file.p"
-									message_str = "File "+filename+" successfully saved"
+								message, message_str, curFrame = save_file(keyFrames, frame_range, curFrame)
 									
 							elif button_str == 'clear':
 								keyFrames = clear_points(keyFrames)
@@ -127,7 +114,7 @@ while True:
 		update_all(screen, screen_size, frames, frame_loc, frame_range, curFrame, font)
 		
 	update_buttons(screen, buttons)
-
+	
 	if mouseOnPic:
 		if frames != []:
 			crosshair_loc = font.render("("+str((x-screen_size[0]+(frame_size[0]+10)))+","+str(y-10)+")",1,(255,255,255))

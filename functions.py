@@ -2,7 +2,7 @@ import pygame, os, sys, pickle
 from pygame.locals import *
 from button import *
 from Tkinter import Tk
-from tkFileDialog import askopenfilename
+from tkFileDialog import askopenfilename, asksaveasfilename
 
 global FPS
 FPS = 90
@@ -42,7 +42,7 @@ def button_pressed(screen,curFrame,str,frame_range):
 			label = font.render("LOADING",1,(255,0,0))
 			screen.blit(label,(350,300))
 			pygame.display.update()
-			os.system("mkdir ffmpeg_temp")
+			os.system("mkdir pic_temp")
 			frames = change_vid(infile, screen)
 			screen.blit(pygame.image.load("Images/bg.png"),(0,0))
 			screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
@@ -54,15 +54,16 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 		
 def change_vid(infile, screen):
-	os.system("ffmpeg -i "+infile+" -r 25 -f image2 ffmpeg_temp/%05d.jpg")
-	path, dirs, files = os.walk("./ffmpeg_temp/").next()
+	#os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	os.system("avconv -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	path, dirs, files = os.walk("./pic_temp/").next()
 	frames = []
 	length = len(files)
 	bar = pygame.image.load("Images/loading.png")
 	c = 1; v = 0
 	files.sort()
 	for i in files:
-		frames.append(pygame.image.load("./ffmpeg_temp/"+i))
+		frames.append(pygame.image.load("./pic_temp/"+i))
 		if (v*100/length) > c:
 			screen.blit(bar,(310+c*3,350))
 			pygame.display.update()
@@ -75,8 +76,7 @@ def exitAndClean():
 	sys.exit()
 	
 def cleanDir():
-	os.system("rm ./ffmpeg_temp/*.jpg")
-	os.system("rmdir ./ffmpeg_temp")
+	os.system("rm -rf ./pic_temp")
 	
 def load_buttons(buttons, screen, screen_size):
 	midx = screen_size[0] - 240; gap = 65; midy = 660; button_x = 50; button_y = 50
@@ -129,11 +129,37 @@ def clear_points(keyFrames):
 		keyFrames.append((1000,1000))
 	return keyFrames
 	
+def save_file(keyFrames, frame_range, curFrame):
+	Tk().withdraw()
+	savefile = asksaveasfilename(filetypes=[("Python Pickle","*.p")])
+	print savefile
+	if savefile is not '':
+		temp = []
+		message = False
+		message_str = ""
+		for i in range(frame_range[0], frame_range[1]):
+			p = keyFrames[i]
+			if p != (1000,1000):
+				temp.append((p,i*1/FPS))
+			else:
+				message_str = "Frame "+str(i)+" missing data point"
+				message = True
+				curFrame = i
+				break
+			if not message:
+				savefile = check_filename(savefile)
+				pickle.dump(temp,open(savefile, "wb"))
+				message = True
+				message_str = "File "+savefile+" successfully saved"
 	
+	return message, message_str, curFrame
 	
-	
-	
-	
+def check_filename(filename):
+	temp2 = filename.split(".")
+	if temp2[len(temp2)-1] == 'p':
+		return filename
+	else: 
+		return filename+".p"
 	
 	
 	
