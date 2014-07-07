@@ -39,11 +39,11 @@ def button_pressed(screen,curFrame,str,frame_range):
 		if infile != '':
 			cleanDir()
 			font = pygame.font.SysFont("sanserif",72)
-			label = font.render("LOADING",1,(255,0,0))
-			screen.blit(label,(350,300))
+			label = font.render("CONVERTING",1,(200,0,0))
+			screen.blit(label,(310,300))
 			pygame.display.update()
 			os.system("mkdir pic_temp")
-			frames = change_vid(infile, screen)
+			frames = change_vid(infile, screen, font)
 			screen.blit(pygame.image.load("Images/bg.png"),(0,0))
 			screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
 			return frames	
@@ -53,25 +53,29 @@ def button_pressed(screen,curFrame,str,frame_range):
 		return frame_range[1]
 		
 		
-def change_vid(infile, screen):
-	#os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
-	os.system("avconv -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+def change_vid(infile, screen, font):
+	os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	#os.system("avconv -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
 	path, dirs, files = os.walk("./pic_temp/").next()
 	frames = []
 	length = len(files)
+	label = font.render("LOADING",1,(200,0,0))
+	screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
+	screen.blit(label,(365,300))
 	bar = pygame.image.load("Images/loading.png")
 	c = 1; v = 0
 	files.sort()
 	for i in files:
 		frames.append(pygame.image.load("./pic_temp/"+i))
 		if (v*100/length) > c:
-			screen.blit(bar,(310+c*3,350))
+			screen.blit(bar,(325+c*3,350))
 			pygame.display.update()
 			c += 1
 		v += 1
 	return frames
 	
 def exitAndClean():
+	cleanDir()
 	pygame.quit()
 	sys.exit()
 	
@@ -132,11 +136,10 @@ def clear_points(keyFrames):
 def save_file(keyFrames, frame_range, curFrame):
 	Tk().withdraw()
 	savefile = asksaveasfilename(filetypes=[("Python Pickle","*.p")])
-	print savefile
+	message = False
+	message_str = ""
 	if savefile is not '':
 		temp = []
-		message = False
-		message_str = ""
 		for i in range(frame_range[0], frame_range[1]):
 			p = keyFrames[i]
 			if p != (1000,1000):
@@ -146,19 +149,19 @@ def save_file(keyFrames, frame_range, curFrame):
 				message = True
 				curFrame = i
 				break
-			if not message:
-				savefile = check_filename(savefile)
-				pickle.dump(temp,open(savefile, "wb"))
-				message = True
-				message_str = "File "+savefile+" successfully saved"
+		if not message:
+			savefile = check_filename(savefile)
+			pickle.dump(temp,open(savefile, "wb"))
+			message = True
+			message_str = "File "+savefile+" successfully saved"
 	
 	return message, message_str, curFrame
 	
 def check_filename(filename):
-	temp2 = filename.split(".")
-	if temp2[len(temp2)-1] == 'p':
+	temp = filename.split(".")
+	if temp[len(temp)-1] == 'p':
 		return filename
-	else: 
+	else:
 		return filename+".p"
 	
 	
