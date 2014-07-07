@@ -54,8 +54,8 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 		
 def change_vid(infile, screen, font):
-	#os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
-	os.system("avconv -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	#os.system("avconv -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
 	path, dirs, files = os.walk("./pic_temp/").next()
 	frames = []
 	length = len(files)
@@ -63,11 +63,11 @@ def change_vid(infile, screen, font):
 	screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
 	screen.blit(label,(365,300))
 	bar = pygame.image.load("Images/loading.png")
-	c = 1; v = 0
+	c = 0; v = 0
 	files.sort()
 	for i in files:
 		frames.append(pygame.image.load("./pic_temp/"+i))
-		if (v*100/length) > c:
+		while (v*100/length) > c:
 			screen.blit(bar,(325+c*3,350))
 			pygame.display.update()
 			c += 1
