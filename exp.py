@@ -3,31 +3,6 @@ from functions import *
 from button import *
 from pygame.locals import *
 
-# Check Display Drivers
-disp_no = os.getenv('DISPLAY')
-if disp_no:
-    print "I'm running under X display = {0}".format(disp_no)
-
-driver = 'directfb'
-if not os.getenv('SDL_VIDEODRIVER'):
-    os.putenv('SDL_VIDEODRIVER', driver)
-drivers = ['directfb', 'fbcon', 'svgalib']
-
-found = False
-for driver in drivers:
-    if not os.getenv('SDL_VIDEODRIVER'):
-        os.putenv('SDL_VIDEODRIVER', driver)
-    try:
-        pygame.display.init()
-    except pygame.error:
-        print 'Driver: {0} failed.'.format(driver)
-        continue
-    found = True
-    break
-
-if not found:
-   raise Exception('No suitable video driver found!')
-
 #os.environ['SDL_VIDEO_WINDOW_POS'] = str(75) + "," + str(30)
 pygame.init()
 
