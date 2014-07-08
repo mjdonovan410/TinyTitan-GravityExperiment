@@ -1,6 +1,7 @@
 import pygame, os, sys, pickle
 from pygame.locals import *
 from button import *
+from textrect import render_textrect
 from Tkinter import Tk
 from tkFileDialog import askopenfilename, asksaveasfilename
 
@@ -45,6 +46,7 @@ def button_pressed(screen,curFrame,str,frame_range):
 			os.system("mkdir pic_temp")
 			frames = change_vid(infile, screen, font)
 			screen.blit(pygame.image.load("Images/bg.png"),(0,0))
+			screen.blit(pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png"),(0,0))
 			screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
 			return frames	
 	elif str == "start":
@@ -83,10 +85,10 @@ def cleanDir():
 	os.system("rm -rf ./pic_temp")
 	
 def load_buttons(buttons, screen, screen_size):
-	midx = screen_size[0] - 240; gap = 65; midy = 660; button_x = 50; button_y = 50
-	buttons.append(Button(screen,False,None,None,"Images/load.png","Images/load2.png","load",(15,20),(200,63)))
-	buttons.append(Button(screen,False,None,None,"Images/start_frame.png","Images/start_frame2.png","set_start",(10,90),(100,38)))
-	buttons.append(Button(screen,False,None,None,"Images/finish_frame.png","Images/finish_frame2.png","set_end",(120,90),(100,38)))
+	midx = screen_size[0] - 240; gap = 65; midy = 660; button_x = 50; button_y = 50; vertical = 150
+	buttons.append(Button(screen,False,None,None,"Images/load.png","Images/load2.png","load",(15,vertical+10),(200,63)))
+	buttons.append(Button(screen,False,None,None,"Images/start_frame.png","Images/start_frame2.png","set_start",(10,vertical+90),(100,38)))
+	buttons.append(Button(screen,False,None,None,"Images/finish_frame.png","Images/finish_frame2.png","set_end",(120,vertical+90),(100,38)))
 	buttons.append(Button(screen,False,None,None,"Images/end.png","Images/end2.png","end",(midx+(2*gap),midy),(button_x,button_y)))
 	buttons.append(Button(screen,False,None,None,"Images/skipf.png","Images/skipf2.png","skipf",(midx+gap,midy),(button_x,button_y)))
 	buttons.append(Button(screen,False,None,None,"Images/stepf.png","Images/stepf2.png","stepf",(midx,midy),(button_x,button_y)))
@@ -94,8 +96,8 @@ def load_buttons(buttons, screen, screen_size):
 	buttons.append(Button(screen,False,None,None,"Images/skipb.png","Images/skipb2.png","skipb",(midx-(2*gap),midy),(button_x,button_y)))
 	buttons.append(Button(screen,False,None,None,"Images/start.png","Images/start2.png","start",(midx-(3*gap),midy),(button_x,button_y)))
 	buttons.append(Button(screen,False,None,None,"Images/save.png","Images/save2.png","save",(15,650),(200,63)))
-	buttons.append(Button(screen,True,"Images/hide.png","Images/hide2.png","Images/show.png","Images/show2.png","show",(10,160),(100,38)))
-	buttons.append(Button(screen,False,None,None,"Images/clear.png","Images/clear2.png","clear",(120,160),(100,38)))
+	buttons.append(Button(screen,True,"Images/hide.png","Images/hide2.png","Images/show.png","Images/show2.png","show",(10,vertical+160),(100,38)))
+	buttons.append(Button(screen,False,None,None,"Images/clear.png","Images/clear2.png","clear",(120,vertical+160),(100,38)))
 	return buttons
 	
 def update_all(screen, screen_size, frames, frame_loc, frame_range, curFrame, font):
@@ -103,8 +105,9 @@ def update_all(screen, screen_size, frames, frame_loc, frame_range, curFrame, fo
 	start_frame = font.render(str(frame_range[0]),1,(255,255,255))
 	end_frame = font.render(str(frame_range[1]),1,(255,255,255))
 	screen.blit(pygame.image.load("Images/bg.png"),(0,0))
-	screen.blit(start_frame,(50,130))
-	screen.blit(end_frame,(155,130))
+	screen.blit(pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png"),(0,0))
+	screen.blit(start_frame,(50,280))
+	screen.blit(end_frame,(155,280))
 	update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
 	
 def update_buttons(screen, buttons):
@@ -133,11 +136,12 @@ def clear_points(keyFrames):
 		keyFrames.append((1000,1000))
 	return keyFrames
 	
-def save_file(keyFrames, frame_range, curFrame):
+def save_file(keyFrames, frame_range, curFrame, font):
 	Tk().withdraw()
 	savefile = asksaveasfilename(filetypes=[("Python Pickle","*.p")])
 	message = False
 	message_str = ""
+	message_rect = pygame.Rect((0,0), (200,150))
 	if savefile is not '':
 		temp = []
 		for i in range(frame_range[0], frame_range[1]):
@@ -153,9 +157,10 @@ def save_file(keyFrames, frame_range, curFrame):
 			savefile = check_filename(savefile)
 			pickle.dump(temp,open(savefile, "wb"))
 			message = True
-			message_str = "File "+savefile+" successfully saved"
+			message_str = ".p File Saved"
 	
-	return message, message_str, curFrame
+	message_area = render_textrect(message_str, font, message_rect, (255,0,0), (0,0,0), justification=1)
+	return message_area, message, curFrame
 	
 def check_filename(filename):
 	temp = filename.split(".")

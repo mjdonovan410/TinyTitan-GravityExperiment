@@ -1,9 +1,8 @@
-import pygame, os, sys, pickle
+import pygame, pickle
 from functions import *
 from button import *
 from pygame.locals import *
 
-#os.environ['SDL_VIDEO_WINDOW_POS'] = str(75) + "," + str(30)
 pygame.init()
 
 # Screen and System Variables
@@ -14,14 +13,20 @@ frame_range = [0,0]
 frame_size = (480,640)
 frame_loc = (screen_size[0]-(frame_size[0]+10),10)
 frames = []
+logo = pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png")
+bg = pygame.image.load("Images/bg.png")
+pic_temp = pygame.image.load("Images/pic_temp.png")
 crosshairs = [pygame.image.load("Images/crosshairs_w.png"),pygame.image.load("Images/crosshairs_h.png")]
 dotR = pygame.image.load("Images/dotr.png").convert_alpha()
 dotB = pygame.image.load("Images/dotb.png").convert_alpha()
 font = pygame.font.SysFont("sanserif",36)
+font2 = pygame.font.SysFont("sanserif",24)
 curFrame = 0
+timer = 0
 keyFrames = []
 button_str = ""
 message_str = ""
+message_rect = pygame.Rect((0,0), (200,150))
 showPoints = False
 mouseOnPic = False
 message = False
@@ -31,9 +36,10 @@ buttons = []
 buttons = load_buttons(buttons, screen, screen_size)
 
 # Video Frame Setup
-FPS = 90
-screen.blit(pygame.image.load("Images/bg.png"),(0,0))
-screen.blit(pygame.image.load("Images/pic_temp.png"),frame_loc)
+update_rate = 25
+screen.blit(bg,(0,0))
+screen.blit(logo,(0,0))
+screen.blit(pic_temp,frame_loc)
 
 while True:
 	prevFrame = curFrame
@@ -96,11 +102,15 @@ while True:
 									showPoints = True
 								update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
 							elif button_str == 'save':
-								message, message_str, curFrame = save_file(keyFrames, frame_range, curFrame)
+								message_area, message, curFrame = save_file(keyFrames, frame_range, curFrame, font2)
 									
 							elif button_str == 'clear':
 								keyFrames = clear_points(keyFrames)
 								update_pic(screen, screen_size, frames, frame_loc, curFrame, font)
+								message_str = "Data Points Erased"
+								message = True
+								message_area = render_textrect(message_str, font2, message_rect, (255,0,0), (0,0,0), justification=1)
+								
 	
 	frame_num = font.render(str(curFrame),1,(255,255,255))
 	
@@ -112,6 +122,12 @@ while True:
 	
 	if button_str in ["set_end","set_start"] and frames != []:
 		update_all(screen, screen_size, frames, frame_loc, frame_range, curFrame, font)
+		message = True
+		if button_str == "set_end":
+			message_str = "End Point set at Frame "+str(curFrame)
+		else:
+			message_str = "Start Point set at Frame "+str(curFrame)
+		message_area = render_textrect(message_str, font2, message_rect, (255,0,0), (0,0,0), justification=1)
 		
 	update_buttons(screen, buttons)
 	
@@ -130,13 +146,20 @@ while True:
 		screen.blit(dotR,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
 	
 	if message:
-		message_convert = font.render(message_str,1,(255,0,0))
-		screen.blit(message_convert,(frame_loc[0]+75,300))
+		screen.blit(message_area,(15,600))
 		message_str = ""
 		message = False
+		timer = 0
+	else:
+		if timer == 2*update_rate:
+			surface = pygame.Surface((200,40)) 
+			surface.fill((0,0,0))
+			screen.blit(surface,(15,600))
 	
+	button_str = ""
 	pygame.display.update()
-	clock.tick(FPS)
+	clock.tick(update_rate)
+	timer += 1
 
 exitAndClean()
 				
