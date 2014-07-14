@@ -1,5 +1,5 @@
-import pygame,sys
-#import RPi.GPIO as GPIO
+import pygame,sys,os
+import RPi.GPIO as GPIO
 from time import sleep,strftime
 from button import *
 from pygame.locals import *
@@ -17,13 +17,13 @@ if rank == 0:
 	button_str = ""
 
 	buttons = []
-	buttons.append(Button(screen,False,None,None,"Images/Record_pics/open.png","Images/Record_pics/open2.png","open",(10,50),(200,55)))
-	buttons.append(Button(screen,False,None,None,"Images/Record_pics/close.png","Images/Record_pics/close2.png","close",(240,50),(200,55)))
-	buttons.append(Button(screen,False,None,None,"Images/Record_pics/drop.png","Images/Record_pics/drop2.png","drop",(125,110),(200,55)))
+	buttons.append(Button(screen,False,None,None,"Images/Record_Pics/open.png","Images/Record_Pics/open2.png","open",(10,50),(200,55)))
+	buttons.append(Button(screen,False,None,None,"Images/Record_Pics/close.png","Images/Record_Pics/close2.png","close",(240,50),(200,55)))
+	buttons.append(Button(screen,False,None,None,"Images/Record_Pics/drop.png","Images/Record_Pics/drop2.png","drop",(125,110),(200,55)))
 
-	#GPIO.setmode(GPIO.BOARD)
-	#GPIO.setup(7,GPIO.OUT)
-	#p = GPIO.PWM(7,50)
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(7,GPIO.OUT)
+	p = GPIO.PWM(7,50)
 
 	degree = []
 	for i in range(19):
@@ -32,10 +32,10 @@ if rank == 0:
 
 	curDeg = 14
 	dc = 20
-	#p.start(degree[curDeg]/dc)
-	#sleep(1)
+	p.start(degree[curDeg]/dc)
+	sleep(1)
 
-	screen.blit(pygame.image.load("Images/Record_pics/header.png"),(0,0))
+	screen.blit(pygame.image.load("Images/Record_Pics/header.png"),(0,0))
 
 	while True:
 		x,y = pygame.mouse.get_pos()
@@ -50,7 +50,7 @@ if rank == 0:
 				if event.key == K_SPACE:
 					print "Dropping"
 					curDeg = 14
-					#p.ChangeDutyCycle(degree[curDeg]/dc)
+					p.ChangeDutyCycle(degree[curDeg]/dc)
 				elif event.key == 27:
 					pygame.quit()
 					sys.exit()
@@ -63,19 +63,20 @@ if rank == 0:
 							print "Gripping"
 							if curDeg > 1:
 								curDeg -= 2
-							#p.ChangeDutyCycle(degree[curDeg]/dc)
+							p.ChangeDutyCycle(degree[curDeg]/dc)
 						elif button_str == 'open':
 							print "Releasing"
 							if curDeg < 17:
 								curDeg += 2
-							#p.ChangeDutyCycle(degree[curDeg]/dc)
+							p.ChangeDutyCycle(degree[curDeg]/dc)
 						elif button_str == 'drop':
 							print "Dropping"
-							comm.send(data,dest=1)
+							comm.send("Dropping Object",dest=1)
 							sleep(4)
 							curDeg = 14
-							#p.ChangeDutyCycle(degree[curDeg]/dc)				
-				
+							p.ChangeDutyCycle(degree[curDeg]/dc)				
+							pygame.quit()
+							break				
 		for i in buttons:
 			screen.blit(i.getpicDisp(),(i.getx(),i.gety()))			
 					
@@ -88,5 +89,5 @@ elif rank == 1:
 	cmd = "raspivid -fps 90 -h 640 -w 480 -t 5000 -o vid_" + strftime("%X") + ".h264"
 	os.system(cmd)
 sys.exit()
-#p.stop()
-#GPIO.cleanup()
+p.stop()
+GPIO.cleanup()
