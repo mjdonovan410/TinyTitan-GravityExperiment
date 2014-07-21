@@ -22,9 +22,9 @@ if rank == 0:
 	button_str = ""
 
 	buttons = []
-	buttons.append(Button(screen,False,None,None,"Images/Record_Pics/open.png","Images/Record_Pics/open2.png","open",(10,50),(200,55)))
-	buttons.append(Button(screen,False,None,None,"Images/Record_Pics/close.png","Images/Record_Pics/close2.png","close",(240,50),(200,55)))
-	buttons.append(Button(screen,False,None,None,"Images/Record_Pics/drop.png","Images/Record_Pics/drop2.png","drop",(125,110),(200,55)))
+	buttons.append(Button(screen,False,None,None,"Images/open.png","Images/open2.png","open",(10,50),(200,55)))
+	buttons.append(Button(screen,False,None,None,"Images/close.png","Images/close2.png","close",(240,50),(200,55)))
+	buttons.append(Button(screen,False,None,None,"Images/drop.png","Images/drop2.png","drop",(125,110),(200,55)))
 
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(7,GPIO.OUT)
@@ -37,7 +37,7 @@ if rank == 0:
 	p.start(d150/dc)
 	sleep(1)
 
-	screen.blit(pygame.image.load("Images/Record_Pics/header.png"),(0,0))
+	screen.blit(pygame.image.load("Images/header.png"),(0,0))
 
 	while True:
 		x,y = pygame.mouse.get_pos()

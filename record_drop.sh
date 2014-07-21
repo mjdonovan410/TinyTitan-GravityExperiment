@@ -1,0 +1,1 @@
+mpirun -np 2 -machinefile ./Record/nodes sudo -E python /Record/record.py
