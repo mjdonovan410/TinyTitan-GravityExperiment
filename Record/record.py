@@ -19,6 +19,7 @@ if rank == 0:
 	update_rate = 20
 	screen_size = (450,200)
 	screen = pygame.display.set_mode(screen_size)
+	pygame.display.set_caption("Experiment Recorder")
 	button_str = ""
 
 	buttons = []

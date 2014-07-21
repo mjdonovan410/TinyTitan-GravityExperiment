@@ -18,6 +18,7 @@ pygame.init()
 clock = pygame.time.Clock()
 screen_size = (720,720)
 screen = pygame.display.set_mode(screen_size)
+pygame.display.set_caption("Experiment Video Loader")
 frame_range = [0,0]
 frame_size = (480,640)
 frame_loc = (screen_size[0]-(frame_size[0]+10),10)
