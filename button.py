@@ -20,7 +20,7 @@ class Button:
 			self.pic2 = None
 		self.pic3 = pygame.image.load(picpath3).convert_alpha()
 		self.pic4 = pygame.image.load(picpath4).convert_alpha()
-		self.picDisp = self.pic1
+		self.picDisp = self.pic3
 		self.actionStr = actionStr
 		self.loc = loc
 		self.size = size

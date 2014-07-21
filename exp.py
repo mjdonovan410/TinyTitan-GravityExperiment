@@ -107,7 +107,8 @@ while True:
 						if button_str == 'load':
 							if temp is not None:
 								frames = temp
-								frame_range[1] = len(frames)-1
+								frame_range = [0,len(frames)-1]
+								keyFrames = []
 								numberBox[0] = render_textrect(str(frame_range[0]), fontB, number_rect, (255,255,255), (0,0,0), justification=1)
 								numberBox[1] = render_textrect(str(frame_range[1]), fontB, number_rect, (255,255,255), (0,0,0), justification=1)
 								for p in range(len(frames)):
@@ -171,7 +172,9 @@ while True:
 		message_area = render_textrect(message_str, fontL, message_rect, (255,0,0), (0,0,0), justification=1)
 	
 	# Updates the button images if they are being hovered
-	update_buttons(screen, buttons)
+	#update_buttons(screen, buttons)
+	for i in buttons:
+		screen.blit(i.getpicDisp(),(i.getx(),i.gety()))
 	
 	# Adds crosshairs if the mouse is on the frame and there are frames
 	if mouseOnPic and frames != []:

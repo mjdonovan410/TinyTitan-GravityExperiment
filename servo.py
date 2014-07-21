@@ -1,4 +1,4 @@
-import pygame,sys,os
+import pygame,sys,os,commands
 import RPi.GPIO as GPIO
 from time import sleep,strftime
 from button import *
@@ -7,11 +7,16 @@ from mpi4py import MPI
 
 comm = MPI.COMM_WORLD
 
-rank = comm.rank
 name = MPI.Get_processor_name()
+rank = comm.rank
+size = comm.size
+
+#print rank,name,size
 
 if rank == 0:
 	pygame.init()
+	clock = pygame.time.Clock()
+	update_rate = 20
 	screen_size = (450,200)
 	screen = pygame.display.set_mode(screen_size)
 	button_str = ""
@@ -25,14 +30,11 @@ if rank == 0:
 	GPIO.setup(7,GPIO.OUT)
 	p = GPIO.PWM(7,50)
 
-	degree = []
-	for i in range(19):
-		x = round(i*10+60)
-		degree.append(x)
-
-	curDeg = 14
+	d0 = .6*100
+	d150 = 2.2*100
+	
 	dc = 20
-	p.start(degree[curDeg]/dc)
+	p.start(d150/dc)
 	sleep(1)
 
 	screen.blit(pygame.image.load("Images/Record_Pics/header.png"),(0,0))
@@ -46,48 +48,65 @@ if rank == 0:
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
-			if event.type == KEYDOWN:
+			elif event.type == KEYDOWN:
 				if event.key == K_SPACE:
-					print "Dropping"
-					curDeg = 14
-					p.ChangeDutyCycle(degree[curDeg]/dc)
+					button_str = 'drop'
 				elif event.key == 27:
 					pygame.quit()
 					sys.exit()
-			if event.type == MOUSEBUTTONDOWN:
+			elif event.type == MOUSEBUTTONDOWN:
 				x,y = event.pos
 				for i in buttons:
 					if i.mouseloc(x,y):
 						button_str = i.getactionStr()
 						if button_str == 'close':
-							print "Gripping"
-							if curDeg > 1:
-								curDeg -= 2
-							p.ChangeDutyCycle(degree[curDeg]/dc)
+							#print "Gripping"
+							p.ChangeDutyCycle(d0/dc)
+							sleep(1)
 						elif button_str == 'open':
-							print "Releasing"
-							if curDeg < 17:
-								curDeg += 2
-							p.ChangeDutyCycle(degree[curDeg]/dc)
-						elif button_str == 'drop':
-							print "Dropping"
-							comm.send("Dropping Object",dest=1)
-							sleep(4)
-							curDeg = 14
-							p.ChangeDutyCycle(degree[curDeg]/dc)				
-							pygame.quit()
-							break				
+							#print "Releasing"
+							p.ChangeDutyCycle(d150/dc)
+							sleep(1)
+		
+		if button_str == 'drop':
+			#print "Dropping"
+			comm.send(button_str,dest=1)
+			sleep(2)
+			p.ChangeDutyCycle(d150/dc)
+			sleep(1)
+			break
+
 		for i in buttons:
 			screen.blit(i.getpicDisp(),(i.getx(),i.gety()))			
 					
-		pygame.display.update()	
-		
+		pygame.display.update()
+		button_str = ""
+		clock.tick(update_rate)	
+	
+	p.stop()	
 	pygame.quit()
+	GPIO.cleanup()	
 
 elif rank == 1:
-	comm.recv(source=0)
-	cmd = "raspivid -fps 90 -h 640 -w 480 -t 5000 -o vid_" + strftime("%X") + ".h264"
-	os.system(cmd)
+	cmdReturn = commands.getoutput("df -h")
+	temp = cmdReturn.split("\n")
+	flashName = ""
+	temp2 = []
+	
+	for i in temp:
+		if "/media/" in i:
+			temp3 = i.split("/media/")
+			temp2.append(temp3[1])
+	for i in temp2:
+		if i != "SETTINGS":
+			flashName = i
+
+	if flashName == "":
+		print "ERROR: NO FLASH DRIVE INSTALLED ON CAMERA PI"
+	else:
+		input = comm.recv(source=0)
+		if input == "drop":
+			cmd = "raspivid -fps 90 -h 640 -w 480 -t 3000 -o /media/"+flashName+"/vid.h264"
+			os.system(cmd)
+
 sys.exit()
-p.stop()
-GPIO.cleanup()

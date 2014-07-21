@@ -50,9 +50,12 @@ def button_pressed(screen,curFrame,str,frame_range):
 		if infile != '':
 			cleanDir()
 			font = pygame.font.SysFont("sanserif",72)
+			font2 = pygame.font.SysFont("sanserif",24)
 			screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
 			label = font.render("CONVERTING",1,(255,255,255))
+			label2 = font2.render("THIS WILL TAKE A MINUTE",1,(255,0,0))
 			screen.blit(label,(310,300))
+			screen.blit(label2,(370,355))
 			pygame.display.update()
 			os.system("mkdir pic_temp")
 			frames = change_vid(infile, screen, font)
@@ -67,8 +70,9 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 # Switches out for the new video once the user selects to load another	
 def change_vid(infile, screen, font):
-	os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
-	#os.system("avconv -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	#os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	# The program thinks the video is at 25 FPS so 1 second at 90 FPS is 3.6 seconds at 25 FPS
+	os.system("avconv -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
 	path, dirs, files = os.walk("./pic_temp/").next()
 	frames = []
 	length = len(files)
@@ -81,7 +85,7 @@ def change_vid(infile, screen, font):
 	for i in files:
 		frames.append(pygame.image.load("./pic_temp/"+i))
 		while (v*100/length) > c:
-			screen.blit(bar,(325+c*3,350))
+			screen.blit(bar,(325+c*3,355))
 			pygame.display.update()
 			c += 1
 		v += 1
@@ -138,7 +142,7 @@ def update_pic(screen, screen_size, frames, frame_loc, curFrame, font):
 
 # Plots all the points in the program
 def show_all_points(screen, keyFrames, frame_range, frame_loc, curFrame, dotR, dotB):
-	for i in range(frame_range[0], frame_range[1]):
+	for i in range(frame_range[0], frame_range[1]+1):
 		p = keyFrames[i]
 		if p != (1000,1000):
 			temp = p
@@ -162,12 +166,12 @@ def save_file(keyFrames, frame_range, curFrame, font):
 	message = False
 	message_str = ""
 	message_rect = pygame.Rect((0,0), (200,150))
-	if savefile is not '':
-		temp = []
-		for i in range(frame_range[0], frame_range[1]):
+	temp = []
+	if savefile != "":
+		for i in range(frame_range[0], frame_range[1]+1):
 			p = keyFrames[i]
 			if p != (1000,1000):
-				temp.append((p,i*1/FPS))
+				temp.append((p,float(i)*1/float(FPS)))
 			else:
 				message_str = "Frame "+str(i)+" missing data point"
 				message = True
