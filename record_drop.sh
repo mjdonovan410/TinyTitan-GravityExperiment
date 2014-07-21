@@ -1,1 +1,6 @@
-mpirun -np 2 -machinefile ./Record/nodes sudo -E python /Record/record.py
+#!/usr/bin/env bash
+
+curLoc=`dirname $BASH_SOURCE`
+cd $curLoc
+cd ./Record
+mpirun -np 2 -machinefile ./nodes.txt sudo -E python record.py

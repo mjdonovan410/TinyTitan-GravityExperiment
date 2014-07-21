@@ -1,1 +1,6 @@
-python ./Load_Video/load_video.py
+#!/usr/bin/env bash
+
+curLoc=`dirname $BASH_SOURCE`
+cd $curLoc
+cd ./Load_Video
+python load_video.py
