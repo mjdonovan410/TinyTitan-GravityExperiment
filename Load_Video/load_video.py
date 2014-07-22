@@ -96,7 +96,7 @@ while True:
 		elif event.type == MOUSEBUTTONDOWN:
 			x,y = event.pos
 			if mouseOnPic and frames != []:
-				keyFrames[curFrame] = (x-screen_size[0]+(frame_size[0]+10),y-10)
+				keyFrames[curFrame] = (x-screen_size[0]+(frame_size[0]+13),y-8)
 			else:
 				#Checks if a button has been pressed
 				for i in buttons:

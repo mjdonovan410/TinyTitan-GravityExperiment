@@ -70,7 +70,7 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 # Switches out for the new video once the user selects to load another	
 def change_vid(infile, screen, font):
-	#os.system("ffmpeg -i "+infile+" -r 25 -f image2 pic_temp/%05d.jpg")
+	#os.system("ffmpeg -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
 	# The program thinks the video is at 25 FPS so 1 second at 90 FPS is 3.6 seconds at 25 FPS
 	os.system("avconv -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
 	path, dirs, files = os.walk("./pic_temp/").next()
@@ -116,7 +116,7 @@ def load_buttons(buttons, screen, screen_size):
 	buttons.append(Button(screen,False,None,None,"Images/stepb.png","Images/stepb2.png","stepb",(midx-gap,midy),(button_x,button_y)))
 	buttons.append(Button(screen,False,None,None,"Images/skipb.png","Images/skipb2.png","skipb",(midx-(2*gap),midy),(button_x,button_y)))
 	buttons.append(Button(screen,False,None,None,"Images/start.png","Images/start2.png","start",(midx-(3*gap),midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/save.png","Images/save2.png","save",(15,640),(200,63)))
+	buttons.append(Button(screen,False,None,None,"Images/save.png","Images/save2.png","save",(15,650),(200,63)))
 	
 	return buttons
 
@@ -171,7 +171,8 @@ def save_file(keyFrames, frame_range, curFrame, font):
 		for i in range(frame_range[0], frame_range[1]+1):
 			p = keyFrames[i]
 			if p != (1000,1000):
-				temp.append((p,float(i)*1/float(FPS)))
+				temp.append((p,(float(i)-frame_range[0])*1/float(FPS)))
+				print temp
 			else:
 				message_str = "Frame "+str(i)+" missing data point"
 				message = True
