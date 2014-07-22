@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.backends.backend_agg as agg
 import pylab
 
-HEIGHT_IN_METERS = 6*0.3048
+HEIGHT_IN_METERS = 6*0.3048 # 6ft conversion
 
 pygame.init()
 
@@ -71,10 +71,8 @@ while True:
 					timing = []
 					data = pickle.load(open(infile,'rb'))
 					length = len(data)
-					for i in range(length+4):
+					for i in range(length):
 						timing.append(float(i)*1/90)
-					for i in range(4):
-						yCoord.append(HEIGHT_IN_METERS)
 					for i in range(length):
 						temp = data[i]
 						coord = temp[0]
@@ -87,7 +85,7 @@ while True:
 					figure = pylab.figure(figsize=[4.5, 4.5],dpi=100)
 					axis = figure.gca()
 					axis.plot(timing,yCoord)
-					print yCoord
+					#print yCoord
 					 
 					canvas = agg.FigureCanvasAgg(figure)
 					canvas.draw()
@@ -133,6 +131,7 @@ while True:
 				raw_data = renderer.tostring_rgb()
 				graph = pygame.image.fromstring(raw_data, (450,450), "RGB")
 				screen.blit(graph, plot_loc)
+				figure.clf
 				
 				
 	for i in buttons:
