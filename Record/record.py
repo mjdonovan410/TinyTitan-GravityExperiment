@@ -1,4 +1,5 @@
 import pygame,sys,os,commands
+sys.path.insert(0, '../lib/')
 import RPi.GPIO as GPIO
 from time import sleep,strftime
 from button import *

@@ -1,4 +1,5 @@
 import pickle,pygame,sys,time,matplotlib,pylab
+sys.path.insert(0, '../lib/')
 from button import *
 from plot_Functions import *
 from textrect import render_textrect
@@ -6,6 +7,7 @@ from pygame.locals import *
 from Tkinter import Tk
 from tkFileDialog import askopenfilename, asksaveasfilename
 import matplotlib.backends.backend_agg as agg
+import matplotlib.pyplot as pyplot
 
 HEIGHT_IN_METERS = 6*0.3048 # 6ft conversion to meters
 
@@ -20,11 +22,17 @@ plot_loc = (235,15)
 logo = pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png")
 plotTemp = pygame.image.load("Images/plot_temp.png")
 font = pygame.font.SysFont("sanserif",30)
-timer = 0
 button_str = ""
-message_str = ""
-message_rect = pygame.Rect((0,0), (200,30))
-message = False
+data_rect = pygame.Rect((0,0), (200,30))
+timing = []
+xCoord = []
+yCoord = []
+pxPerM = 1000
+yFit = []
+vi = 0.00
+fitResults = [None,None]
+figure = None
+axis = None
 
 # Creates an array of Button objects the will provide data and blit the objects to the screen
 buttons = []
@@ -36,15 +44,6 @@ buttons.append(Button(screen,False,None,None,"Images/advanced.png","Images/advan
 update_rate = 20
 screen.blit(logo,(0,0))
 screen.blit(plotTemp,plot_loc)
-timing = []
-xCoord = []
-yCoord = []
-pxPerM = 1000
-yFit = []
-iV = 0.00
-fitResults = [None,None]
-figure = None
-axis = None
 
 while True:
 	x,y = pygame.mouse.get_pos()
@@ -71,22 +70,29 @@ while True:
 				infile = askopenfilename(filetypes=[("Python Pickle","*.p")])
 				if infile != '':
 					xCoord, yCoord, timing, pxPerM, figure, axis = load_data(infile,figure,axis,HEIGHT_IN_METERS)
-					graph = create_graph(figure)
+					graph = create_graph(figure, plot_size)
 					screen.blit(graph, plot_loc)
-					figure.clf
+					fitResults[0] = render_textrect("", font, data_rect, (255,0,0), (0,0,0), justification=1)
+					fitResults[1] = render_textrect("", font, data_rect, (255,0,0), (0,0,0), justification=1)
+					screen.blit(fitResults[0],(15,220))
+					screen.blit(fitResults[1],(15,250))
+					pyplot.clf()
 			
 			elif button_str == "fit":
-				g, iV, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis)
-				fitResults[0] = render_textrect("G = "+str(g)+" m/s^2", font, message_rect, (255,0,0), (0,0,0), justification=1)
-				fitResults[1] = render_textrect("iV = "+str(iV)+" m/s", font, message_rect, (255,0,0), (0,0,0), justification=1)
-				graph = create_graph(figure)
-				screen.blit(fitResults[0],(15,220))
-				screen.blit(fitResults[1],(15,250))
-				screen.blit(graph, plot_loc)
-				figure.clf
+				if yCoord != []:
+					g, vi, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis)
+					fitResults[0] = render_textrect("g = "+str(g)+" m/s^2", font, data_rect, (255,0,0), (0,0,0), justification=1)
+					fitResults[1] = render_textrect("vi = "+str(vi)+" m/s", font, data_rect, (255,0,0), (0,0,0), justification=1)
+					graph = create_graph(figure, plot_size)
+					screen.blit(fitResults[0],(15,220))
+					screen.blit(fitResults[1],(15,250))
+					screen.blit(graph, plot_loc)
+					pyplot.ylim((0,HEIGHT_IN_METERS))
+					pyplot.clf()
 			
 			elif button_str == "afit":
-				print "UNDER CONSTRUCTION"
+				if yCoord != []:
+					print "UNDER CONSTRUCTION"
 				
 				
 	for i in buttons:

@@ -6,7 +6,8 @@ Purpose:  Provides a service to load a video created by the raspberry pi, and co
 in other programs.
 '''	
 
-import pygame, pickle
+import pygame, pickle, sys
+sys.path.insert(0, '../lib/')
 from functions import *
 from button import *
 from textrect import render_textrect

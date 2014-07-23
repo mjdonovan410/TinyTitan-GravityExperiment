@@ -7,6 +7,7 @@ Purpose:  Provide functions for exp.py in a way to keep the driver file less clu
 
 import pygame, os, sys, pickle
 from pygame.locals import *
+sys.path.insert(0, '../lib/')
 from button import *
 from textrect import render_textrect
 from Tkinter import Tk
@@ -172,7 +173,7 @@ def save_file(keyFrames, frame_range, curFrame, font):
 			p = keyFrames[i]
 			if p != (1000,1000):
 				temp.append((p,(float(i)-frame_range[0])*1/float(FPS)))
-				print temp
+				#print temp
 			else:
 				message_str = "Frame "+str(i)+" missing data point"
 				message = True
