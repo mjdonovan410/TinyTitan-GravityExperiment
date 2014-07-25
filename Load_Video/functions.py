@@ -71,9 +71,9 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 # Switches out for the new video once the user selects to load another	
 def change_vid(infile, screen, font):
-	#os.system("ffmpeg -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
+	os.system("ffmpeg -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
 	# The program thinks the video is at 25 FPS so 1 second at 90 FPS is 3.6 seconds at 25 FPS
-	os.system("avconv -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
+	#os.system("avconv -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
 	path, dirs, files = os.walk("./pic_temp/").next()
 	frames = []
 	length = len(files)
@@ -105,19 +105,19 @@ def cleanDir():
 # Loads the buttons into an array for easy access and processing	
 def load_buttons(buttons, screen, screen_size):
 	midx = screen_size[0] - 240; gap = 65; midy = 660; button_x = 50; button_y = 50; vertical = 150
-	buttons.append(Button(screen,False,None,None,"Images/load.png","Images/load2.png","load",(15,vertical+10),(200,63)))
-	buttons.append(Button(screen,False,None,None,"Images/start_frame.png","Images/start_frame2.png","set_start",(10,vertical+75),(100,38)))
-	buttons.append(Button(screen,False,None,None,"Images/finish_frame.png","Images/finish_frame2.png","set_end",(120,vertical+75),(100,38)))
-	buttons.append(Button(screen,False,None,None,"Images/reset.png","Images/reset2.png","reset",(15,vertical+145),(200,34)))
-	buttons.append(Button(screen,True,"Images/hide.png","Images/hide2.png","Images/show.png","Images/show2.png","show",(10,vertical+185),(100,38)))
-	buttons.append(Button(screen,False,None,None,"Images/clear.png","Images/clear2.png","clear",(120,vertical+185),(100,38)))
-	buttons.append(Button(screen,False,None,None,"Images/end.png","Images/end2.png","end",(midx+(2*gap),midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/skipf.png","Images/skipf2.png","skipf",(midx+gap,midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/stepf.png","Images/stepf2.png","stepf",(midx,midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/stepb.png","Images/stepb2.png","stepb",(midx-gap,midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/skipb.png","Images/skipb2.png","skipb",(midx-(2*gap),midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/start.png","Images/start2.png","start",(midx-(3*gap),midy),(button_x,button_y)))
-	buttons.append(Button(screen,False,None,None,"Images/save.png","Images/save2.png","save",(15,650),(200,63)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/load.png","Images/load2.png","load",(15,vertical+10),(200,63)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/start_frame.png","Images/start_frame2.png","set_start",(10,vertical+75),(100,38)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/finish_frame.png","Images/finish_frame2.png","set_end",(120,vertical+75),(100,38)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/reset.png","Images/reset2.png","reset",(15,vertical+145),(200,34)))
+	buttons.append(ImgButton(screen,True,"Images/hide.png","Images/hide2.png","Images/show.png","Images/show2.png","show",(10,vertical+185),(100,38)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/clear.png","Images/clear2.png","clear",(120,vertical+185),(100,38)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/end.png","Images/end2.png","end",(midx+(2*gap),midy),(button_x,button_y)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/skipf.png","Images/skipf2.png","skipf",(midx+gap,midy),(button_x,button_y)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/stepf.png","Images/stepf2.png","stepf",(midx,midy),(button_x,button_y)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/stepb.png","Images/stepb2.png","stepb",(midx-gap,midy),(button_x,button_y)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/skipb.png","Images/skipb2.png","skipb",(midx-(2*gap),midy),(button_x,button_y)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/start.png","Images/start2.png","start",(midx-(3*gap),midy),(button_x,button_y)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/save.png","Images/save2.png","save",(15,650),(200,63)))
 	
 	return buttons
 

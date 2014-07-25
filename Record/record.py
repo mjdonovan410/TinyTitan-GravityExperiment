@@ -24,9 +24,9 @@ if rank == 0:
 	button_str = ""
 
 	buttons = []
-	buttons.append(Button(screen,False,None,None,"Images/open.png","Images/open2.png","open",(10,50),(200,55)))
-	buttons.append(Button(screen,False,None,None,"Images/close.png","Images/close2.png","close",(240,50),(200,55)))
-	buttons.append(Button(screen,False,None,None,"Images/drop.png","Images/drop2.png","drop",(125,110),(200,55)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/open.png","Images/open2.png","open",(10,50),(200,55)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/close.png","Images/close2.png","close",(240,50),(200,55)))
+	buttons.append(ImgButton(screen,False,None,None,"Images/drop.png","Images/drop2.png","drop",(125,110),(200,55)))
 
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(7,GPIO.OUT)

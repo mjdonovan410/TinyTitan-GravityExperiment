@@ -10,7 +10,7 @@ from pygame.locals import *
 
 # Takes the image paths and loads the images as variables so it can switch between the two on hover
 # If it is a toggle button, it will switch to the next two images when clicked
-class Button:
+class ImgButton:
 	def __init__(self, screen, toggle, picpath1, picpath2, picpath3, picpath4, actionStr, loc, size):
 		if toggle:
 			self.pic1 = pygame.image.load(picpath1).convert_alpha()
