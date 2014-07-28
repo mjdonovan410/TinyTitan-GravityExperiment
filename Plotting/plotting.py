@@ -8,8 +8,6 @@ from Tkinter import Tk
 from tkFileDialog import askopenfilename, asksaveasfilename
 import matplotlib.backends.backend_agg as agg
 import matplotlib.pyplot as pyplot
-from scipy.optimize import curve_fit
-import numpy as np
 
 HEIGHT_IN_METERS = 6*0.3048 # 6ft conversion to meters
 pygame.init()
@@ -34,6 +32,9 @@ vi = 0.00
 fitResults = [None,None,None]
 figure = None
 axis = None
+g = 0
+Cd = 0
+vi = 0
 
 # Creates an array of Button objects the will provide data and blit the objects to the screen
 buttons = []
@@ -60,11 +61,6 @@ while True:
 			if event.key == 27:
 				pygame.quit()
 				sys.exit()
-			elif event.key == K_SPACE:
-				timeT = np.array(timing)
-				yC = np.array(yCoord)
-				popt, pcov = curve_fit(getY, timeT, yC)
-				print popt
 		elif event.type == MOUSEBUTTONDOWN:
 			x,y = event.pos
 			for i in buttons:
@@ -75,39 +71,34 @@ while True:
 				Tk().withdraw()
 				infile = askopenfilename(filetypes=[("Python Pickle","*.p")])
 				if infile != '':
+					g = 0
+					Cd = 0
+					vi = 0
 					xCoord, yCoord, timing, pxPerM, figure, axis = load_data(infile,figure,axis,HEIGHT_IN_METERS)
 					graph = create_graph(figure, plot_size)
 					screen.blit(graph, plot_loc)
-					fitResults[0] = render_textrect("", font, data_rect, (255,0,0), (0,0,0), justification=1)
-					fitResults[1] = render_textrect("", font, data_rect, (255,0,0), (0,0,0), justification=1)
-					screen.blit(fitResults[0],(15,220))
-					screen.blit(fitResults[1],(15,250))
+					screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 0)
 					pyplot.clf()
 			
 			elif button_str == "fit":
 				if yCoord != []:
 					g, vi, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis)
-					fitResults[0] = render_textrect("g = "+str(g)+" m/s^2", font, data_rect, (255,0,0), (0,0,0), justification=1)
-					fitResults[1] = render_textrect("vi = "+str(vi)+" m/s", font, data_rect, (255,0,0), (0,0,0), justification=1)
 					graph = create_graph(figure, plot_size)
-					screen.blit(fitResults[0],(15,220))
-					screen.blit(fitResults[1],(15,250))
+					screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 1)
 					screen.blit(graph, plot_loc)
 					pyplot.ylim((0,HEIGHT_IN_METERS))
 					pyplot.clf()
 			
 			elif button_str == "afit":
 				if yCoord != []:
-					print get_constants()
-					g, vi, figure, axis = fit_data_advanced(yCoord,timing,pxPerM,HEIGHT_IN_METERS,figure,axis)
-					fitResults[0] = render_textrect("g = "+str(g)+" m/s^2", font, data_rect, (255,0,0), (0,0,0), justification=1)
-					fitResults[1] = render_textrect("vi = "+str(vi)+" m/s", font, data_rect, (255,0,0), (0,0,0), justification=1)
-					graph = create_graph(figure, plot_size)
-					screen.blit(fitResults[0],(15,220))
-					screen.blit(fitResults[1],(15,250))
-					screen.blit(graph, plot_loc)
-					pyplot.ylim((0,HEIGHT_IN_METERS))
-					pyplot.clf()
+					mass, csArea, airD = get_constants()
+					if None not in [mass,csArea,airD]:
+						g, vi, Cd, figure, axis = fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis)
+						graph = create_graph(figure, plot_size)
+						screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 2)
+						screen.blit(graph, plot_loc)
+						pyplot.ylim((0,HEIGHT_IN_METERS))
+						pyplot.clf()
 				
 				
 	for i in buttons:

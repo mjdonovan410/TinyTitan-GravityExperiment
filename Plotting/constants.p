@@ -1,0 +1,16 @@
+(lp0
+(S'Baseball'
+p1
+(lp2
+F0.142
+aF0.00418539
+aF1.225
+atp3
+a(S'Tennis'
+p4
+(lp5
+F0.057
+aF0.00335978
+aF1.184
+atp6
+a.

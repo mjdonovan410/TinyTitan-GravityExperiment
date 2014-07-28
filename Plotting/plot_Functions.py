@@ -6,8 +6,7 @@ from pygame.locals import *
 from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename
 import matplotlib.backends.backend_agg as agg
-from scipy.optimize import curve_fit
-import numpy as np
+import tkSimpleDialog
 
 global constGUI
 global m
@@ -79,29 +78,25 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis):
 	axis.legend()
 	return g, vi, figure, axis
 	
-def fit_data_advanced(yCoord,timing,pxPerM,HEIGHT_IN_METERS,figure,axis):
-	gTmp = 7.0
-	viTemp = -1.50
+def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
+	gTmp = 9.0
+	viTemp = -0.50
+	CdTemp = 0.3
 	g = 0; vi = 0; diff = 0; Cd = 0
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
-	m = .057
-	CdTemp = .3
-	rho = 1.225
-	A = 0.00335978
 	
-	while gTmp < 12.0:
-		while viTemp < 1.50:
-			while CdTemp < .8:
+	while gTmp < 10.5:
+		while viTemp < 0.50:
+			while CdTemp < 1.0:
 				for i in range(len(timing)):
-					a = math.sqrt(2*m*gTmp/(rho*A*CdTemp))
-					b = math.sqrt(gTmp*rho*CdTemp*A/(2*m))
+					a = math.sqrt(2*mass*gTmp/(airD*csArea*CdTemp))
+					b = math.sqrt(gTmp*airD*CdTemp*csArea/(2*mass))
 					temp.append(HEIGHT_IN_METERS - (a*math.log(math.cosh(b*timing[i])))/b - viTemp*timing[i])
 					diff += (yCoord[i]-temp[i])**2
 				yFit.append(diff)
-				if round(gTmp,1) == 9.8 and round(viTemp,2) == 0.00:
+				if round(CdTemp,2) == 0.47 and round(gTmp,1) == 9.8 and round(viTemp,2) == 0.00:
 					idealGraph = temp
 				if diff == min(yFit):
-					fitGraph = []
 					yFit = []
 					yFit.append(diff)
 					g = gTmp
@@ -110,10 +105,10 @@ def fit_data_advanced(yCoord,timing,pxPerM,HEIGHT_IN_METERS,figure,axis):
 					Cd = CdTemp
 				temp = []
 				diff = 0
-				viTemp = round(viTemp+0.05,2)
 				CdTemp += .01
-			CdTemp = .3
-		viTemp = -1.50
+			CdTemp = 0.3
+			viTemp += 0.05
+		viTemp = -0.50
 		gTmp += 0.05
 	axis = figure.gca(axisbg="0.0")
 	axis = style_axis(axis,HEIGHT_IN_METERS)
@@ -121,8 +116,7 @@ def fit_data_advanced(yCoord,timing,pxPerM,HEIGHT_IN_METERS,figure,axis):
 	axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
 	axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
 	axis.legend()
-	print Cd
-	return g, vi, figure, axis
+	return round(g,2), round(vi,2), round(Cd,2), figure, axis
 
 def style_axis(axis,HEIGHT_IN_METERS):
 	axis.set_xlabel('Time(s)')
@@ -137,50 +131,61 @@ def style_axis(axis,HEIGHT_IN_METERS):
 			i.set_color('#000000')
 	return axis
 	
-def get_constants():	
-	global constGUI
-	global m
-	global rho
-	global A
-	
-	m = 0
-	rho = 0
-	A = 0
-	area = StringVar()
-	mass = StringVar()
-	air = StringVar()
-	
-	constGUI = Tk()
-	constGUI.geometry("300x175+100+100")
-	l1 = Label(constGUI,text="Advanced Fitting Options",font=("sanserif", 16)).pack()
-	l2 = Label(constGUI,text="Object's Mass(kg)").place(x=15,y=40)
-	l3 = Label(constGUI,text="Air Density(kg/m^3)").place(x=15,y=70)
-	l4 = Label(constGUI,text="Object's Area(m^2)").place(x=15,y=100)
-	b1 = Button(constGUI,text="OK",command=lambda:save_constants(mass.get(),air.get(),area.get())).place(x=120,y=130)
-	b2 = Button(constGUI,text="Cancel",command=save_constants).place(x=150,y=130)
-	e1 = Entry(constGUI,textvariable=mass).place(x=155,y=40)
-	e2 = Entry(constGUI,textvariable=air).place(x=155,y=70)
-	e3 = Entry(constGUI,textvariable=area).place(x=155,y=100)
-	constGUI.mainloop()
-	return m, rho, A
+def get_constants():
+	mass = None
+	csArea = None
+	airD = None
+	data = pickle.load(open("constants.p", "rb"))
+	pNames = [str(i[0]) for i in data]
+	preset = tkSimpleDialog.askstring("Load Preset", "Please type a preset name or new")
+	if preset == 'new':
+		mass = tkSimpleDialog.askstring("Mass", "Type value of the object's mass(kg)")
+		if mass != None:
+			csArea = tkSimpleDialog.askstring("Cross-Sectional Area", "Type value of the object's cross-sectional area(m^2)")
+			if csArea != None:
+				airD = tkSimpleDialog.askstring("Air Density", "Type value of the room's Air Density(kg/m^3)")
+				if airD != None:
+					try:
+						mass = float(mass)
+						csArea = float(csArea)
+						airD = float(airD)
+						name = tkSimpleDialog.askstring("Name New Preset", "What would you like to name the new preset?")
+						if name == None:
+							name = "Temp"
+						if name in pNames:
+							temp = pNames.index(name)
+							data.pop(temp)
+						data.append((name,[mass,csArea,airD]))
+						pickle.dump(data, open("constants.p", "wb"))
+					except ValueError:
+						mass = None
+						print "Values entered invalid"
+	else:
+		if preset in pNames:
+			temp = data[pNames.index(preset)]
+			temp2 = temp[1]
+			mass = temp2[0]
+			csArea = temp2[1]
+			airD = temp2[2]
+		else:
+			print preset,"has not been defined as a preset"
+	return mass, csArea, airD
 
-def save_constants(mass,air,area):
-	global constGUI
-	global m
-	global rho
-	global A
-	m = mass
-	rho = air
-	A = area
-	constGUI.destroy()
-	constGUI.quit()
-	return
+def load_results(screen, fitResults, font, data_rect, g, vi, Cd, state):
+	if state == 0:
+		fitResults[0] = render_textrect("", font, data_rect, (255,0,0), (0,0,0), justification=1)
+		screen.blit(fitResults[0],(15,210))
+		screen.blit(fitResults[0],(15,240))
+		screen.blit(fitResults[0],(15,270))
+	elif state in [1,2]:
+		fitResults[0] = render_textrect("g = "+str(g)+" m/s^2", font, data_rect, (255,0,0), (0,0,0), justification=1)
+		fitResults[1] = render_textrect("vi = "+str(vi)+" m/s", font, data_rect, (255,0,0), (0,0,0), justification=1)
+		fitResults[2] = render_textrect("", font, data_rect, (255,0,0), (0,0,0), justification=1)
+		screen.blit(fitResults[0],(15,210))
+		screen.blit(fitResults[1],(15,240))
+		screen.blit(fitResults[2],(15,270))
+	if state == 2:
+		fitResults[2] = render_textrect("Cd = "+str(Cd), font, data_rect, (255,0,0), (0,0,0), justification=1)
+		screen.blit(fitResults[2],(15,270))
 	
-def getY(timing, g, Cd, vi):
-	HEIGHT_IN_METERS = 6*0.3048
-	m = 0.057
-	rho = 1.225
-	A =  0.00335978
-	a = np.sqrt(2*m*abs(g)/(rho*A*abs(Cd)))
-	b = np.sqrt(abs(g)*rho*abs(Cd)*A/(2*m))
-	return (HEIGHT_IN_METERS - (a*np.log(np.cosh(b*timing)))/b - vi*timing)
+	return screen, fitResults
