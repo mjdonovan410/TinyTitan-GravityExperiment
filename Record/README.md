@@ -14,7 +14,9 @@ Recording the object dropping is most important part of the experiment. If done 
    8. Assuming that the files have already been loaded on the Pis, open "nodes.txt" and edit it with the IP addresses from each Pi being sure that the first IP address is the Pi connected to the claw.  
 
 At this point, everything should be properly setup and you can either move back a directory and run the script called "record_drop.sh" or type:  
-'''mpirun -np 2 -machinefile ./nodes.txt sudo -E python record.py'''
+'''
+mpirun -np 2 -machinefile ./nodes.txt sudo -E python record.py
+'''
 
 The Pis will take about 10 seconds to setup MPI, but once the GUI is loaded, it is ready to be used.
 
