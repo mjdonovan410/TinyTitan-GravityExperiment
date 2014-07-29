@@ -65,10 +65,12 @@ if rank == 0:
 				
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
+				data = comm.bcast(None,root=0)
 				pygame.quit()
-				sys.exit()
+				sys.exit()				
 			elif event.type == KEYDOWN:
 				if event.key == 27:
+					data = comm.bcast(None,root=0)
 					pygame.quit()
 					sys.exit()
 			elif event.type == MOUSEBUTTONDOWN:
@@ -118,12 +120,16 @@ if rank == 0:
 		pygame.display.update()
 		clock.tick(update_rate)
 else:
-	data = comm.bcast(None,root=0)
-	yCoord = data[0]
-	timing = data[1]
-	if input == "fit":
-		g, vi, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank)
-		comm.send([g,vi],dest=0)
-	elif input == "afit":
-		g, vi, Cd, figure, axis = fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm,size,rank)
-		comm.send([g,vi,Cd],dest=0)
+	while True:
+		data = comm.bcast(None,root=0)
+		if data == None:
+			break
+		yCoord = data[0]
+		timing = data[1]
+		if input == "fit":
+			g, vi, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank)
+			comm.send([g,vi],dest=0)
+		elif input == "afit":
+			g, vi, Cd, figure, axis = fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm,size,rank)
+			comm.send([g,vi,Cd],dest=0)
+	sys.exit()

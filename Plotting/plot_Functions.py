@@ -45,10 +45,12 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank):
 	
 	# MPI Splitting of loop
 	range = 5.0
-	tmp = float(range/size)
+	tmp = round(range/size,2)
 	min = gTmp + (rank*tmp)
 	gTmp = min
 	max = min+(rank*tmp)
+	
+	print rank,size,min,"---",max
 	
 	while gTmp < max:
 		while viTemp < 0.50:
