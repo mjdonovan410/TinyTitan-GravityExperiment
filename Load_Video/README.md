@@ -2,7 +2,7 @@ Processing Video
 =============
 
 Once the video has been recorded to the flash drive, the apparatus is no longer needed for the rest of the experiment. This program is 
-for grabbing the coordinates of the ball in each frame as the ball is dropping. This program does not require parallelization so it can be run
+for grabbing the coordinates of the ball in each frame as the ball is dropping. This program does not require parallelization so it can run
 on just one Raspberry Pi.
 
 ----------
@@ -10,9 +10,9 @@ on just one Raspberry Pi.
    1. Connect one of the Raspberry Pis with a monitor, keyboard, and mouse. Then supply it power.  
    2. Plug in the flash drive that was used to record the video.  
    3. Either run the script called `load_video.sh` or while in the Load_Video directory, type:  
-	```
-	python load_video.py
-	```
+```
+python load_video.py
+```
 ---------
 
 Once loaded, the GUI will look like this:  
@@ -20,6 +20,7 @@ Once loaded, the GUI will look like this:
 
 #### Controls
 There are a mixture of buttons and keyboard shortcuts to make things easier.  
+
 | Button      | Key        | Description  
 |:-----------:|:----------:| --------------------------
 | Load        | N/A        | Converts and loads a .h264 video file
