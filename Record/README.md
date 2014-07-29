@@ -13,11 +13,11 @@ Recording the object dropping is most important part of the experiment. If done 
    5. On the smaller frame, place the ribbon cable from the Pi Camera into the slot closest to the Ethernet port. Make sure the bare wire side of the cable is facing the HDMI port.  
    6. Also on the smaller frame pi, plug in the other end of the Ethernet cable connecting the two Pis together.  
    7. Now move the frames apart making sure the poles are at least 7ft apart (assuming a 6ft dropping height) and provide power to the Pis.  
-   8. Assuming that the files have already been loaded on the Pis, open "nodes.txt" and edit it with the IP addresses from each Pi being sure that the first IP address is the Pi connected to the claw.  
+   8. Assuming that the files have already been loaded on the Pis, open `nodes.txt` and edit it with the IP addresses from each Pi being sure that the first IP address is the Pi connected to the claw.  
    
 --------------
 
-At this point, everything should be properly setup and you can either move back a directory and run the script called "record_drop.sh" or type:  
+At this point, everything should be properly setup and you can either move back a directory and run the script called `record_drop.sh` or type:  
 ```
 mpirun -np 2 -machinefile ./nodes.txt sudo -E python record.py
 ```
@@ -28,6 +28,6 @@ Once ready, this GUI will pop up:
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Record/Images/gui.png "Record GUI")
 
 Now comes the simple part. Using the mouse, click on a button that will command the claw to either open or close the claw to prepare the object. 
-Once nothing is obstructing the camera's view, press the "Drop" button. There will be a slight delay while the camera warms up and then the object will drop.
+Once nothing is obstructing the camera's view, press the `Drop` button. There will be a slight delay while the camera warms up and then the object will drop.
 
 The recording will be saved on the flash drive **NOT the SD card**, so make sure there is a flash drive plugged into the Pi connected to the camera.
