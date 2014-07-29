@@ -13,11 +13,11 @@ on just one Raspberry Pi.
 ```
 python load_video.py
 ```
----------
 
 Once loaded, the GUI will look like this:  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Load_Video/Images/gui.png "Video Processing GUI")
 
+---------
 #### Controls
 There are a mixture of buttons and keyboard shortcuts to make things easier.  
 
@@ -37,3 +37,13 @@ There are a mixture of buttons and keyboard shortcuts to make things easier.
 | **&#124;>**      | e          | Skip forwards
 | **>&#124;**      | N/A        | Move to the end of the range
 | N/A         | ESC        | Exit program
+
+---------
+#### Recommended Instructions   
+   1. Click Load and navigate to the flash drive, `/media/FLASH_DRIVE_NAME`, then select the video file you would like to load.  
+   2. Get a cup of coffee while converting and loading (The Pis can only convert at about 1FPS)
+   3. Once loaded, move to the first frame the ball moves and then go back one frame. Click the Start button to set the start point.
+   4. Now move to the frame where the ball touches the ground. Click the Finish button to set the end point. Because the range is set, 
+   now you can only move between the frames in the range.
+   5. Go back to the start of the ball dropping. For each frame in the range, click on the ball. Try to click the same part of the ball 
+   (we recommend that you track the front end of the ball). The X-Coordinate doesn't matter but the Y-Coordinate should be as close as possible.
