@@ -92,7 +92,7 @@ if rank == 0:
 				
 				elif button_str == "fit":
 					if yCoord != []:
-						comm.bcast([yCoord,timing],source=0)
+						comm.bcast([yCoord,timing],root=0)
 						g, vi, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank)
 						graph = create_graph(figure, plot_size)
 						screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 1)
@@ -118,7 +118,7 @@ if rank == 0:
 		pygame.display.update()
 		clock.tick(update_rate)
 else:
-	data = comm.bcast(None,source=0)
+	data = comm.bcast(None,root=0)
 	yCoord = data[0]
 	timing = data[1]
 	if input == "fit":
