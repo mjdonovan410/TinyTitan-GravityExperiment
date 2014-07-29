@@ -3,15 +3,8 @@ from button import *
 from plot_Functions import *
 from textrect import render_textrect
 from pygame.locals import *
-from Tkinter import *
-from tkFileDialog import askopenfilename, asksaveasfilename
 import matplotlib.backends.backend_agg as agg
 import tkSimpleDialog
-
-global constGUI
-global m
-global rho
-global A
 
 def load_data(infile,figure,axis,HEIGHT_IN_METERS):
 	xCoord = []
@@ -44,19 +37,26 @@ def create_graph(figure,plot_size):
 	graph = pygame.image.fromstring(raw_data, plot_size, "RGB")
 	return graph
 	
-def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis):
+def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank):
 	gTmp = 7.0
-	viTemp = -1.50
+	viTemp = -0.50
 	g = 0; vi = 0; diff = 0
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
 	
-	while gTmp < 12.0:
-		while viTemp < 1.50:
+	# MPI Splitting of loop
+	range = 5.0
+	tmp = float(range/size)
+	min = gTmp + (rank*tmp)
+	gTmp = min
+	max = min+(rank*tmp)
+	
+	while gTmp < max:
+		while viTemp < 0.50:
 			for i in range(len(timing)):
 				temp.append(HEIGHT_IN_METERS -(float(gTmp)*(timing[i]**2)/2) - viTemp*timing[i])
 				diff += (yCoord[i]-temp[i])**2
 			yFit.append(diff)
-			if round(gTmp,1) == 9.8 and round(viTemp,2) == 0.00:
+			if round(gTmp,1) == 9.81 and round(viTemp,2) == 0.00:
 				idealGraph = temp
 			if diff == min(yFit):
 				fitGraph = []
@@ -68,38 +68,48 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis):
 			temp = []
 			diff = 0
 			viTemp = round(viTemp+0.05,2)
-		viTemp = -1.50
-		gTmp += 0.05
-	axis = figure.gca(axisbg="0.0")
-	axis = style_axis(axis,HEIGHT_IN_METERS)
-	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
-	axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
-	axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
-	axis.legend()
+		viTemp = -0.50
+		gTmp += 0.01
+	
+	if rank == 0:
+		input = []
+		i = 1
+		while i < size:
+			input.append(comm.recv(source=0))
+		print input
+		axis = figure.gca(axisbg="0.0")
+		axis = style_axis(axis,HEIGHT_IN_METERS)
+		axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
+		axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
+		axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
+		axis.legend()
 	return g, vi, figure, axis
 	
-def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
-	gTmp = 9.0
+def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm,size,rank):
+	gTemp = 9.0
 	viTemp = -0.50
 	CdTemp = 0.3
 	g = 0; vi = 0; diff = 0; Cd = 0
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
+	idealTemp = 0
 	
-	while gTmp < 10.5:
+	while gTemp < 10.5:
 		while viTemp < 0.50:
-			while CdTemp < 1.0:
+			while CdTemp < .8:
 				for i in range(len(timing)):
-					a = math.sqrt(2*mass*gTmp/(airD*csArea*CdTemp))
-					b = math.sqrt(gTmp*airD*CdTemp*csArea/(2*mass))
+					a = math.sqrt(2*mass*gTemp/(airD*csArea*CdTemp))
+					b = math.sqrt(gTemp*airD*CdTemp*csArea/(2*mass))
 					temp.append(HEIGHT_IN_METERS - (a*math.log(math.cosh(b*timing[i])))/b - viTemp*timing[i])
 					diff += (yCoord[i]-temp[i])**2
 				yFit.append(diff)
-				if round(CdTemp,2) == 0.47 and round(gTmp,1) == 9.8 and round(viTemp,2) == 0.00:
+				if round(CdTemp,2) == 0.47 and round(gTemp,1) == 9.8 and round(viTemp,2) == 0.00:
 					idealGraph = temp
+					idealTemp = diff
 				if diff == min(yFit):
+					print diff,round(Cd,2),gTemp
 					yFit = []
 					yFit.append(diff)
-					g = gTmp
+					g = gTemp
 					vi = viTemp
 					fitGraph = temp
 					Cd = CdTemp
@@ -109,7 +119,7 @@ def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,fig
 			CdTemp = 0.3
 			viTemp += 0.05
 		viTemp = -0.50
-		gTmp += 0.05
+		gTemp += 0.01
 	axis = figure.gca(axisbg="0.0")
 	axis = style_axis(axis,HEIGHT_IN_METERS)
 	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
