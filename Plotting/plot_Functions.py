@@ -37,28 +37,19 @@ def create_graph(figure,plot_size):
 	graph = pygame.image.fromstring(raw_data, plot_size, "RGB")
 	return graph
 	
-def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank):
+def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis):
 	gTmp = 7.0
 	viTemp = -0.50
 	g = 0; vi = 0; diff = 0
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
 	
-	# MPI Splitting of loop
-	range = 5.0
-	tmp = round(range/size,2)
-	min = gTmp + (rank*tmp)
-	gTmp = min
-	max = min+(rank*tmp)
-	
-	print rank,size,min,"---",max
-	
-	while gTmp < max:
+	while gTmp < 12.0:
 		while viTemp < 0.50:
 			for i in range(len(timing)):
 				temp.append(HEIGHT_IN_METERS -(float(gTmp)*(timing[i]**2)/2) - viTemp*timing[i])
 				diff += (yCoord[i]-temp[i])**2
 			yFit.append(diff)
-			if round(gTmp,1) == 9.81 and round(viTemp,2) == 0.00:
+			if round(gTmp,1) == 9.8 and round(viTemp,2) == 0.00:
 				idealGraph = temp
 			if diff == min(yFit):
 				fitGraph = []
@@ -72,22 +63,15 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm,size,rank):
 			viTemp = round(viTemp+0.05,2)
 		viTemp = -0.50
 		gTmp += 0.01
-	
-	if rank == 0:
-		input = []
-		i = 1
-		while i < size:
-			input.append(comm.recv(source=0))
-		print input
-		axis = figure.gca(axisbg="0.0")
-		axis = style_axis(axis,HEIGHT_IN_METERS)
-		axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
-		axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
-		axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
-		axis.legend()
+	axis = figure.gca(axisbg="0.0")
+	axis = style_axis(axis,HEIGHT_IN_METERS)
+	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
+	axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
+	axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
+	axis.legend()
 	return g, vi, figure, axis
 	
-def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm,size,rank):
+def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
 	gTemp = 9.0
 	viTemp = -0.50
 	CdTemp = 0.3
