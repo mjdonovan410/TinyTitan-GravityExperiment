@@ -19,7 +19,7 @@ At this point, everything should be properly setup and you can either move back 
 The Pis will take about 10 seconds to setup MPI, but once the GUI is loaded, it is ready to be used.
 
 Once ready, this GUI will pop up:  
-![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/tree/master/Record/Images/gui.png "Record GUI")
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Record/Images/gui.png "Record GUI")
 
 Now comes the simple part. Using the mouse, click on a button that will command the claw to either open or close the claw to prepare the object. 
 Once nothing is obstructing the camera's view, press the "Drop" button. There will be a slight delay while the camera warms up and then the object will drop.
