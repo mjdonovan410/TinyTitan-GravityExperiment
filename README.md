@@ -6,13 +6,15 @@ Once the apparatus has been built, these user-friendly programs will be able to 
 description of the results. This experiment can be preformed by people of all skill levels.
 
 The experiment is broken up into three stages:  
-1. Recording the object falling  
-2. Obtaining data coordinates from the recorded video  
-3. Plotting and fitting the data  
+   1. Recording the object falling  
+   2. Obtaining data coordinates from the recorded video  
+   3. Plotting and fitting the data  
 
-Any stage of this experiment can be replaced with user code, but these programs provide both a simplistic user interface and a benchmark for the students to {blank}
+Any stage of this experiment can be replaced with user code, but these programs provide both a simplistic user interface and a benchmark 
+for the students to compare results.
 
-Each folder has a separate README file explaining the different parts of each program and how to properly operate them. There are some scripts that are shortcuts to type in terminal.
+Each folder has a separate README file explaining each program and how to properly operate them. Provided are some shell scripts that 
+make running in terminal simpler.
 
 #### Software Dependencies
 ------------
@@ -29,10 +31,10 @@ Other
 
 #### Hardware Dependencies
 -----------
-* *Tiny Titan*(recommended) **OR** 2 Raspberry Pi's and Linux Desktop  
+* *Tiny Titan* (recommended) **OR** 2 Raspberry Pi's and Linux Desktop  
 * Pi Camera  
 * Claw with Servo  
 * 3 GPIO Jumper Wires  
 * 10' Ethernet Cable  
-* Flash Drive(Most sizes will suffice)  
+* Flash Drive (Most sizes will suffice)  
 
