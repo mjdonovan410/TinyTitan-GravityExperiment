@@ -15,16 +15,23 @@ Each folder has a separate README file explaining the different parts of each pr
 ### Software Dependencies
 ------------
 Python
+
 pygame,matplotlib,mpi4py,six,parsing,dateutil
 
 Other
+
 libav-tools
 
 ### Hardware Dependencies
 -----------
 *Tiny Titan*(recommended) **OR** 2 Raspberry Pi's and Linux Desktop 
-Pi Camera
+
+Pi Camera 
+
 Claw with Servo
+
 3 GPIO Jumper Wires
+
 10' Ethernet Cable
+
 Flash Drive(Most sizes will suffice)
