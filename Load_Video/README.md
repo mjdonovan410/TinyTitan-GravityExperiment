@@ -30,10 +30,10 @@ There are a mixture of buttons and keyboard shortcuts to make things easier.
 | Show/Hide   | N/A        | Shows/Hides all data points clicked
 | Clear       | N/A        | Clears all data points
 | Save        | N/A        | Save a Python Pickle File of the coordinates
-| **|<**      | N/A        | Move to the beginning of the range
-| **<|**      | q          | Skip backwards
-| **|<|**     | LEFT or a  | Steps one frame backwards
-| **|>|**     | RIGHT or d | Steps one frame forwards 
-| **|>**      | e          | Skip forwards
-| **>|**      | N/A        | Move to the end of the range
+| **&#124;<**      | N/A        | Move to the beginning of the range
+| **<&#124;**      | q          | Skip backwards
+| **&#124;<&#124;**     | LEFT or a  | Steps one frame backwards
+| **&#124;>&#124;**     | RIGHT or d | Steps one frame forwards 
+| **&#124;>**      | e          | Skip forwards
+| **>&#124;**      | N/A        | Move to the end of the range
 | N/A         | ESC        | Exit program
