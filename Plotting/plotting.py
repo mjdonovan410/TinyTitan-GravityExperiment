@@ -15,18 +15,11 @@ comm = MPI.COMM_WORLD
 name = MPI.Get_processor_name()
 rank = comm.rank
 size = comm.size
+print rank, name, size
 
 HEIGHT_IN_METERS = 6*0.3048 # 6ft conversion to meters
 pygame.init()
 
-clock = pygame.time.Clock()
-screen_size = (700,480)
-screen = pygame.display.set_mode(screen_size)
-pygame.display.set_caption("Experiment Plotting")
-plot_size = (450,450)
-plot_loc = (235,15)
-logo = pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png")
-plotTemp = pygame.image.load("Images/plot_temp.png")
 font = pygame.font.SysFont("sanserif",30)
 button_str = ""
 data_rect = pygame.Rect((0,0), (200,30))
@@ -44,6 +37,15 @@ Cd = 0
 vi = 0
 
 if rank == 0:
+	clock = pygame.time.Clock()
+	screen_size = (700,480)
+	screen = pygame.display.set_mode(screen_size)
+	pygame.display.set_caption("Experiment Plotting")
+	plot_size = (450,450)
+	plot_loc = (235,15)
+	logo = pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png")
+	plotTemp = pygame.image.load("Images/plot_temp.png")
+	
 	# Creates an array of Button objects the will provide data and blit the objects to the screen
 	buttons = []
 	buttons.append(ImgButton(screen,False,None,None,"Images/load.png","Images/load2.png","load",(15,140),(200,49)))
