@@ -3,7 +3,7 @@ TinyTitan-PhysicsExperiment
 
 This physics experiment is a fun and interactive way for students to learn about the effects of gravity and drag on a falling object.
 Once the apparatus has been built, these user-friendly programs will be able to assist in the collection of data and provide a detailed 
-description of the results. This experiment can be preformed by people of all skill levels.
+description of the results. This experiment can be performed by people of all skill levels.
 
 The experiment is broken up into three stages:  
    1. Recording the object falling  
@@ -18,19 +18,20 @@ make running in terminal simpler.
 
 #### Software Dependencies
 ------------
-Python  
+##### Python  
 * pygame  
-* mpi4py 
+* mpi4py  
 * matplotlib   
 * six  
 * parsing  
 * dateutil  
 
-Other  
+##### Other  
 * libav-tools
 
 #### Hardware Dependencies
 -----------
+* *Tiny Titan Recording Apparatus*  
 * *Tiny Titan* (recommended) **OR** 2 Raspberry Pi's and Linux Desktop  
 * Pi Camera  
 * Claw with Servo  
