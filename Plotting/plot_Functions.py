@@ -92,7 +92,6 @@ def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,fig
 					idealGraph = temp
 					idealTemp = diff
 				if diff == min(yFit):
-					#print diff,round(Cd,2),gTemp
 					yFit = []
 					yFit.append(diff)
 					g = gTemp

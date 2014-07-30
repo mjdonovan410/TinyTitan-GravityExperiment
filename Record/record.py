@@ -12,8 +12,6 @@ name = MPI.Get_processor_name()
 rank = comm.rank
 size = comm.size
 
-#print rank,name,size
-
 if rank == 0:
 	pygame.init()
 	clock = pygame.time.Clock()
@@ -62,18 +60,15 @@ if rank == 0:
 					if i.mouseloc(x,y):
 						button_str = i.getactionStr()
 						if button_str == 'close':
-							#print "Gripping"
 							p.ChangeDutyCycle(d0/dc)
 							sleep(1)
 						elif button_str == 'open':
-							#print "Releasing"
 							p.ChangeDutyCycle(d150/dc)
 							sleep(1)
 		
 		if button_str == 'drop':
-			#print "Dropping"
 			comm.send(button_str,dest=1)
-			sleep(2)
+			sleep(3)
 			p.ChangeDutyCycle(d150/dc)
 			sleep(1)
 			break
@@ -90,10 +85,10 @@ if rank == 0:
 	GPIO.cleanup()	
 
 elif rank == 1:
-	cmdReturn = commands.getoutput("df -h")
-	temp = cmdReturn.split("\n")
 	flashName = ""
 	temp2 = []
+	cmdReturn = commands.getoutput("df -h")
+	temp = cmdReturn.split("\n")
 	
 	for i in temp:
 		if "/media/" in i:
@@ -106,9 +101,10 @@ elif rank == 1:
 	if flashName == "":
 		print "ERROR: NO FLASH DRIVE INSTALLED ON CAMERA PI"
 	else:
-		input = comm.recv(source=0)
+		input = comm.recv(source=0)		
 		if input == "drop":
-			cmd = "raspivid -fps 90 -h 640 -w 480 -t 3000 -o /media/"+flashName+"/vid.h264"
+			fileName = "vid"+time.strftime("%m-%d_%H%M")+".h264"
+			cmd = "raspivid -fps 90 -h 640 -w 480 -t 4000 -o /media/"+flashName+"/"+fileName
 			os.system(cmd)
 
 sys.exit()
