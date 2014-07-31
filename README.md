@@ -16,8 +16,8 @@ for the students to compare results.
 Each folder has a separate README file explaining each program and how to properly operate them. Provided are some shell scripts that 
 make running in terminal simpler.
 
-#### Software Dependencies
 ------------
+#### Software Dependencies
 ##### Python  
 * pygame  
 * mpi4py  
@@ -29,8 +29,9 @@ make running in terminal simpler.
 ##### Other  
 * libav-tools
 
-#### Hardware Dependencies
 -----------
+#### Hardware Dependencies
+
 * *Tiny Titan Recording Apparatus*  
 * *Tiny Titan* (recommended) **OR** 2 Raspberry Pi's and Linux Desktop  
 * Pi Camera  
@@ -39,3 +40,27 @@ make running in terminal simpler.
 * 10' Ethernet Cable  
 * Flash Drive (Most sizes will suffice)  
 
+----------
+
+##Tiny Titan Recording Apparatus Instructions
+This apparatus is built with a mixture of 80/20 and some material from the hardware store. The design was developed as simplistically as possible keeping in mind that not everyone has power tools or a high levels of building skills. Below will give very detailed instructions on how to develop both frames and assemble the claw.
+
+------
+#### Parts for Frames
+##### 80/20  
+|Part # | Quantity | Name                         | 
+|:-----:|:--------:|------------------------------|
+| 1010  |  3       | 1' 10 Series T-Slot          |
+| 1010  |  3       | 2' 10 Series T-Slot          |
+| 1010  |  3       | 3' 10 Series T-Slot          |
+| 1010  |  1       | 6' 10 Series T-Slot          |
+| 4112  |  2       | 7-Hole Tee Joining Plate     |
+| 4140  |  2       | 5-Hole Tee Joining Plate     |
+| 4115  |  12      | 4-Hole Inside Corner Bracket |
+| 3393  |  14      | 10 Series BHSCS & ECON T-NUT |
+| 3321  |  14      | 10 Series FBHSCS & ECON T-NUT|
+| 3393  |  48      | 10 Series BHSCS & ECON T-NUT |
+| 3321  |  10      | 10 Series FBHSCS & ECON T-NUT|
+| 2015  |  10      | 10 Series End Cap            |
+
+*End caps are not necessary, and they hardly stay on*
