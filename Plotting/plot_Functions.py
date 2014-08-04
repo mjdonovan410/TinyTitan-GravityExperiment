@@ -9,6 +9,7 @@ import tkSimpleDialog
 def load_data(infile,figure,axis,HEIGHT_IN_METERS):
 	xCoord = []
 	yCoord = []
+	yCoordNew = []
 	timing = []
 	data = pickle.load(open(infile,'rb'))
 	length = len(data)
@@ -20,14 +21,21 @@ def load_data(infile,figure,axis,HEIGHT_IN_METERS):
 		timing.append(temp[1])
 	pxPerM = (max(yCoord)-min(yCoord))/HEIGHT_IN_METERS
 	for i in range(len(yCoord)):
-		yCoord[i] = round((max(yCoord)-yCoord[i]-min(yCoord))/pxPerM,3)
+		yCoordNew.append(round((max(yCoord)-yCoord[i]-min(yCoord))/pxPerM,3))
+		#print yCoordNew[i]
+	if min(yCoordNew) < 0:
+		miny = min(yCoordNew)
+		for i in range(length):
+			yCoordNew[i] = yCoordNew[i] - miny
+	#print yCoordNew
+			
 	figure = pylab.figure(figsize=[6, 6],dpi=75,facecolor="0.1")
 	axis = figure.gca(axisbg="0.0")
 	axis = style_axis(axis,HEIGHT_IN_METERS)
-	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
+	axis.plot(timing,yCoordNew,'b',label='Data',linewidth=2)
 	axis.legend()
 	
-	return xCoord, yCoord, timing, pxPerM, figure, axis
+	return xCoord, yCoordNew, timing, pxPerM, figure, axis
 	
 def create_graph(figure,plot_size):
 	canvas = agg.FigureCanvasAgg(figure)
@@ -98,9 +106,10 @@ def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,fig
 					vi = viTemp
 					fitGraph = temp
 					Cd = CdTemp
+					#print g,vi,Cd,diff
 				temp = []
 				diff = 0
-				CdTemp += .01
+				CdTemp += .05
 			CdTemp = 0.3
 			viTemp += 0.05
 		viTemp = -0.50
@@ -109,7 +118,7 @@ def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,fig
 	axis = style_axis(axis,HEIGHT_IN_METERS)
 	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
 	axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
-	axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
+	#axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
 	axis.legend()
 	return round(g,2), round(vi,2), round(Cd,2), figure, axis
 

@@ -71,7 +71,7 @@ def button_pressed(screen,curFrame,str,frame_range):
 		
 # Switches out for the new video once the user selects to load another	
 def change_vid(infile, screen, font):
-	#os.system("ffmpeg -i "+infile+" -ss 00:00:04.8 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
+	#os.system("ffmpeg -i "+infile+" -ss 00:00:08.4 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg") #Windows use only
 	# The program thinks the video is at 25 FPS so 1 second at 90 FPS is 3.6 seconds at 25 FPS
 	os.system("avconv -i "+infile+" -ss 00:00:08.4 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
 	path, dirs, files = os.walk("./pic_temp/").next()

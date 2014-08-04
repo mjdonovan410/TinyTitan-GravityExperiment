@@ -103,7 +103,7 @@ elif rank == 1:
 	else:
 		input = comm.recv(source=0)		
 		if input == "drop":
-			fileName = "vid"+time.strftime("%m-%d_%H%M")+".h264"
+			fileName = "vid"+strftime("%m-%d_%H%M%S")+".h264"
 			cmd = "raspivid -fps 90 -h 640 -w 480 -t 4000 -o /media/"+flashName+"/"+fileName
 			os.system(cmd)
 
