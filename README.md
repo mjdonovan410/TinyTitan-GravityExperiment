@@ -32,8 +32,8 @@ make running in terminal simpler.
 -----------
 #### Hardware Dependencies
 
-* *Tiny Titan Recording Apparatus*  
-* *Tiny Titan* (recommended) **OR** 2 Raspberry Pi's and Linux Desktop  
+* *Tiny Titan Recording Apparatus*  (See `Construction_Info` for details)
+* *Tiny Titan* (recommended) **OR** 2 Raspberry Pi's and Powerful Linux Desktop  
 * Pi Camera  
 * Claw with Servo  
 * 3 GPIO Jumper Wires  

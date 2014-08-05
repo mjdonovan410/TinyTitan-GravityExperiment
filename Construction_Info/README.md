@@ -43,7 +43,7 @@ This apparatus is built with a mixture of 80/20 and some material from the hardw
 2. Take the middle 2' piece and mount both of the 7-Hole Tee Joining Plates in the center of the extrusion. Then mount the corner brackets on the ends. Place all the screws into the slots of the brackets and put the T-Nut on each screw loosely before sliding it into place. This makes the assembly process much simpler. **The plate takes the screws with the larger heads and flat edges.**  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/middleLarge.jpg "Assembling Middle Section")  
 
-    **I didn't at this point but you can also add the rest of the screws in the T-Plate*
+    *I didn't at this point but you can also add the rest of the screws in the T-Plate*
 
 3. Once done, slide it into the 3' pieces slots slightly off-center. 
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/slideMiddleLarge.jpg "Slide in Middle Section")   
@@ -52,18 +52,18 @@ This apparatus is built with a mixture of 80/20 and some material from the hardw
 5. Once everything is put into place, tighten all the corner brackets. Now straighten all the T-Nuts on the middle bracket so the 6' pole can drop in easily. Then place the 6' pole. Make sure to center the plates in the middle of the extrusion before tightening. Tighten the bottom 4 screws on each side before tightening the plates to the 6' pole.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/tightenAndPole.jpg "Add Pole")   
 
-    **Now that the basic frame is done, you will realize that the 6' pole is quite wobbly and putting a lot of stress on the beam. This is where the wire comes into play.*  
+    *Now that the basic frame is done, you will realize that the 6' pole is quite wobbly and putting a lot of stress on the beam. This is where the wire comes into play.*  
 
 6. Take one of the 9" cables and two ferrules and stops. On one end of the wire, take a ferrule and place the cable through one of the gaps and then back thought the other gap creating a loop. Shrink the loop then crimp the ferrule. Then add the stopper on the scrap of wire left to prevent fraying. Crimp the stop as well.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/ferrule.jpg "Making Wire Loops")   
 
-    **I didn't have a crimping tool so I just used the yellow handled combination pliers and crimped with the wire cutting part.*  
+    *I didn't have a crimping tool so I just used the yellow handled combination pliers and crimped with the wire cutting part.*  
 
 7. Repeat step 6 for the other 3 ends of the cable.  
 8. Back on the frame, move the two T-Nuts placed earlier to the ends of the beam. Take the eye bolts and move the nut up on the bolt and screw them into the T-Nut in the frame. On the other end, place a T-Nut into each of the 3' pieces equidistant from the center pole as the other side. Then add the bolts to these T-Nuts as well. Then tighten all the nuts on the eye bolts to the extrusion.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/eyeBolts.jpg "Adding Eye Bolts")   
 
-    **I added the T-Nut to the bolt before I slid it into the slot as seen in the first image. It's not necessary, but it cuts out a step.*
+    *I added the T-Nut to the bolt before I slid it into the slot as seen in the first image. It's not necessary, but it cuts out a step.*
 
 9. Following the same process as above, take the last two eye bolts and place them roughly 2/3rd up the center pole in the slot where the plates mounted. **Likely will require a readjustment later.**  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/eyeBolts2.jpg "Adding Eye Bolts on Pole")   
@@ -91,7 +91,7 @@ Everything should be properly assembled at this point and ready for the Pis, the
 #### Claw Assembly
 This part of the Assembly is where students can get involved. We have developed a claw to work for this experiment but any claw developed could work. It would be interesting to make it a project and then choose the best one.
 
-As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love and Josh Reed. The files needed are in the folder named `Claw Parts`. 
+As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love and Josh Reed. The files needed are in the folder named `3D Print Files`. 
 
 ##### Hardware for Claw  
 | Quantity | Part                        |
@@ -100,3 +100,20 @@ As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love 
 | 4        | 8-32 by 7/16" Bolt with nut |
 | 2        | 6-32 by 1/2" Bolt with nut  |
 | 1        | Hitec HS-322HD Servo Motor  |
+
+##### Assembly  
+1. Organize all the pieces into little piles like below.
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/startClaw.jpg "Parts for Claw")  
+2. Take the main part of the frame and places nuts into each of the 4 slots for the servo's mount. Disconnect the wheel on top of the servo and set it aside for now. Take the servo and place it into the open slot with the cable facing away from the mount. Screw in the 4 screws to hold the servo in place. Don't tighten too much or it will break the part the prevents the nuts from turning.  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/servoOnClaw.jpg "Attaching Servo")  
+3. Take the geared arm with the slightly larger hole and screw the plate from the servo onto it with the toothed edge of the plate facing out. Using the toothed edge, place it onto the servo and rotate clockwise until it won't rotate anymore. Once complete, take it off and place it back on in the same position as seen in the picture. *This sets the far point of the servo to be when the claw is all the way back.*  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/servoArmOnClaw.jpg "Servo Arm")  
+4. Now taking the other geared arm, place a spacer in the center and then place it net to the other arm. Get the arms as close to the same angle as possible as seen in the picture.  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/otherArm.jpg "Dependent Gear Arm")  
+5. Take the guiding arms and place the spacers in the holes on both ends. Then put them in place with the nuts and bolts. Tighten the bolts by pushing your finger on the top of the bolt and tightening with the wrench. This prevents over tightening.  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/guideArms.jpg "Guide Arms")  
+6. Lastly, add the claw piece and places the nuts and bolts into the arms fastening them. Again tighten with the wrench and your finger.
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/attachClaw.jpg "Attach Claw to Arms")  
+
+The claw should be ready for dropping objects.  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/finishedClaw.jpg "Finished Claw") 

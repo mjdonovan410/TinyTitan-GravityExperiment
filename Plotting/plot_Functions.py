@@ -5,6 +5,7 @@ from textrect import render_textrect
 from pygame.locals import *
 import matplotlib.backends.backend_agg as agg
 import tkSimpleDialog
+from mpi4py import MPI
 
 def load_data(infile,figure,axis,HEIGHT_IN_METERS):
 	xCoord = []
@@ -45,13 +46,21 @@ def create_graph(figure,plot_size):
 	graph = pygame.image.fromstring(raw_data, plot_size, "RGB")
 	return graph
 	
-def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis):
-	gTmp = 7.0
+def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
+	rank = comm.rank
+	size = comm.size
+	name = MPI.Get_processor_name()
+	
+	gStart = 7.0 + float(rank)*float(5/float(size))
+	gStop = gStart + float(5/float(size))
+	print rank, name,gStart,"--",gStop
+	
+	gTmp = gStart
 	viTemp = -0.50
-	g = 0; vi = 0; diff = 0
+	g = 0; vi = 0; diff = 0; lowestDiff = 0;
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
 	
-	while gTmp < 12.0:
+	while gTmp < gStop:
 		while viTemp < 0.50:
 			for i in range(len(timing)):
 				temp.append(HEIGHT_IN_METERS -(float(gTmp)*(timing[i]**2)/2) - viTemp*timing[i])
@@ -66,18 +75,37 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis):
 				g = gTmp
 				vi = viTemp
 				fitGraph = temp
+				lowestDiff = diff
 			temp = []
 			diff = 0
 			viTemp = round(viTemp+0.05,2)
 		viTemp = -0.50
 		gTmp += 0.01
-	axis = figure.gca(axisbg="0.0")
-	axis = style_axis(axis,HEIGHT_IN_METERS)
-	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
-	axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
-	axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
-	axis.legend()
-	return g, vi, figure, axis
+	data = comm.gather([g,vi,None,lowestDiff,fitGraph,idealGraph],root=0)
+	if rank == 0:
+		g,vi,Cd,fitGraph,idealGraph = get_smallest(data)		
+		axis = figure.gca(axisbg="0.0")
+		axis = style_axis(axis,HEIGHT_IN_METERS)
+		axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
+		axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
+		axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
+		axis.legend()
+		return g, vi, figure, axis
+		
+def get_smallest(data)
+	diffTemp = 100
+	bestFit = []
+	for i in data:
+		if i[3] < diffTemp:
+			diffTemp = i[3]
+			bestFit = i
+		if i[5] != []:
+			idealGraph = i[5]
+	g = bestFit[0]
+	vi = bestFit[1]
+	Cd = bestFit[2]
+	fitGraph = bestFit[4]
+	return g,vi,Cd,fitGraph,idealGraph
 	
 def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
 	gTemp = 9.0
