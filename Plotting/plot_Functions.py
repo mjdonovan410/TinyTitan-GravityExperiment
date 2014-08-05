@@ -112,17 +112,28 @@ def get_smallest(data):
 	fitGraph = bestFit[4]
 	return g,vi,Cd,fitGraph,idealGraph
 	
-def fit_data_advanced(screen,yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
-	gTemp = 9.0
+def fit_data_advanced(screen,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm):
+	rank = comm.rank
+	size = comm.size
+	name = MPI.Get_processor_name()
+	totRange = [9.0,10.5]
+	gStep = 0.01
+	viStep = 0.05
+	CdStep = 0.01
+	
+	gStart = floor(100*(totRange[0] + float(rank)*float((totRange[1]-totRange[0])/float(size))))/100 + 0.01
+	gStop = floor(100*(gStart + float((totRange[1]-totRange[0])/float(size))))/100 - 0.01
+	print rank, name,gStart,"--",gStop
+	
+	gTemp = gStart
 	viTemp = -0.50
-	CdTemp = 0.3
+	CdTemp = 0.45
 	g = 0; vi = 0; diff = 0; Cd = 0
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
-	idealTemp = 0
 	
-	while gTemp < 10.5:
+	while gTemp < gStop:
 		while viTemp < 0.50:
-			while CdTemp < .8:
+			while CdTemp < .65:
 				for i in range(len(timing)):
 					a = math.sqrt(2*mass*gTemp/(airD*csArea*CdTemp))
 					b = math.sqrt(gTemp*airD*CdTemp*csArea/(2*mass))
@@ -131,7 +142,6 @@ def fit_data_advanced(screen,yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_MET
 				yFit.append(diff)
 				if round(CdTemp,2) == 0.47 and round(gTemp,1) == 9.8 and round(viTemp,2) == 0.00:
 					idealGraph = temp
-					idealTemp = diff
 				if diff == min(yFit):
 					yFit = []
 					yFit.append(diff)
@@ -139,22 +149,24 @@ def fit_data_advanced(screen,yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_MET
 					vi = viTemp
 					fitGraph = temp
 					Cd = CdTemp
-					#print g,vi,Cd,diff
 				temp = []
 				diff = 0
-				CdTemp += .05
-			CdTemp = 0.3
-			viTemp += 0.05
+				CdTemp += CdStep
+			CdTemp = 0.45
+			viTemp += viStep
 		viTemp = -0.50
-		gTemp += 0.01
-	loading_plot(screen)
-	axis = figure.gca(axisbg="0.0")
-	axis = style_axis(axis,HEIGHT_IN_METERS)
-	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
-	axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
-	#axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
-	axis.legend()
-	return round(g,2), round(vi,2), round(Cd,2), figure, axis
+		gTemp += gStep
+	data = comm.gather([g,vi,Cd,lowestDiff,fitGraph,idealGraph],root=0)
+	if rank == 0:
+		g,vi,Cd,fitGraph,idealGraph = get_smallest(data)
+		loading_plot(screen)
+		axis = figure.gca(axisbg="0.0")
+		axis = style_axis(axis,HEIGHT_IN_METERS)
+		axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
+		axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
+		axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
+		axis.legend()
+		return round(g,2), round(vi,2), round(Cd,2), figure, axis
 
 def style_axis(axis,HEIGHT_IN_METERS):
 	axis.set_xlabel('Time(s)')
@@ -229,7 +241,7 @@ def load_results(screen, fitResults, font, data_rect, g, vi, Cd, state):
 	return screen, fitResults
 	
 def loading_plot(screen):
-	fontB = pygame.font.SysFont("sanserif",48)
+	font = pygame.font.SysFont("sanserif",48)
 	label = font.render("CREATING PLOT",1,(255,0,0))
 	screen.blit(label,(330,220))
 	pygame.display.update()

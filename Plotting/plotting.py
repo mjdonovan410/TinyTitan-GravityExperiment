@@ -104,7 +104,8 @@ if rank == 0:
 					if yCoord != []:
 						mass, csArea, airD = get_constants()
 						if None not in [mass,csArea,airD]:
-							g, vi, Cd, figure, axis = fit_data_advanced(screen,yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis)
+							comm.bcast([button_str,yCoord,timing,mass,csArea,airD],root=0)
+							g, vi, Cd, figure, axis = fit_data_advanced(screen,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm)
 							graph = create_graph(figure, plot_size)
 							screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 2)
 							screen.blit(graph, plot_loc)
@@ -121,13 +122,12 @@ if rank == 0:
 else:
 	while True:
 		data = comm.bcast(None,root=0)
-		button_str = data[0]
-		yCoord = data[1]
-		timing = data[2]
+		button_str = data[0]; yCoord = data[1]; timing = data[2]
 		if button_str == 'fit':
 			fit_data_basic(None,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm)
 		elif button_str == 'afit':
-			pass
+			mass = data[3]; csArea = data[4]; airD = data[5]
+			fit_data_advanced(None,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm)
 		elif button_str == 'quit':
 			sys.exit()
 			break
