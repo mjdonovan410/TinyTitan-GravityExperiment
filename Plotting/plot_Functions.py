@@ -228,7 +228,8 @@ def load_results(screen, fitResults, font, data_rect, g, vi, Cd, state):
 	
 	return screen, fitResults
 	
-def loading_plot(screen)
-	fontB = pygame.font.SysFont("sanserif",36)
-	label = font.render("CREATING PLOT",1,(255,255,255))
-	screen.blit(label,(300,220))
+def loading_plot(screen):
+	fontB = pygame.font.SysFont("sanserif",48)
+	label = font.render("CREATING PLOT",1,(255,0,0))
+	screen.blit(label,(330,220))
+	pygame.display.update()
