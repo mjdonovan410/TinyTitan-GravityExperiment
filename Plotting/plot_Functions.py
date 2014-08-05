@@ -5,9 +5,10 @@ from textrect import render_textrect
 from pygame.locals import *
 import matplotlib.backends.backend_agg as agg
 import tkSimpleDialog
+from math import floor
 from mpi4py import MPI
 
-def load_data(infile,figure,axis,HEIGHT_IN_METERS):
+def load_data(screen,infile,figure,axis,HEIGHT_IN_METERS):
 	xCoord = []
 	yCoord = []
 	yCoordNew = []
@@ -29,7 +30,7 @@ def load_data(infile,figure,axis,HEIGHT_IN_METERS):
 		for i in range(length):
 			yCoordNew[i] = yCoordNew[i] - miny
 	#print yCoordNew
-			
+	loading_plot(screen)		
 	figure = pylab.figure(figsize=[6, 6],dpi=75,facecolor="0.1")
 	axis = figure.gca(axisbg="0.0")
 	axis = style_axis(axis,HEIGHT_IN_METERS)
@@ -46,13 +47,16 @@ def create_graph(figure,plot_size):
 	graph = pygame.image.fromstring(raw_data, plot_size, "RGB")
 	return graph
 	
-def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
+def fit_data_basic(screen,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
 	rank = comm.rank
 	size = comm.size
 	name = MPI.Get_processor_name()
+	totRange = [7.5,11.5]
+	gStep = 0.01
+	viStep = 0.05
 	
-	gStart = 7.0 + float(rank)*float(5/float(size))
-	gStop = gStart + float(5/float(size))
+	gStart = floor(100*(totRange[0] + float(rank)*float((totRange[1]-totRange[0])/float(size))))/100 + 0.01
+	gStop = floor(100*(gStart + float((totRange[1]-totRange[0])/float(size))))/100 - 0.01
 	print rank, name,gStart,"--",gStop
 	
 	gTmp = gStart
@@ -78,11 +82,12 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
 				lowestDiff = diff
 			temp = []
 			diff = 0
-			viTemp = round(viTemp+0.05,2)
+			viTemp = round(viTemp+viStep,2)
 		viTemp = -0.50
-		gTmp += 0.01
+		gTmp += gStep
 	data = comm.gather([g,vi,None,lowestDiff,fitGraph,idealGraph],root=0)
 	if rank == 0:
+		loading_plot(screen)
 		g,vi,Cd,fitGraph,idealGraph = get_smallest(data)		
 		axis = figure.gca(axisbg="0.0")
 		axis = style_axis(axis,HEIGHT_IN_METERS)
@@ -92,7 +97,7 @@ def fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
 		axis.legend()
 		return g, vi, figure, axis
 		
-def get_smallest(data)
+def get_smallest(data):
 	diffTemp = 100
 	bestFit = []
 	for i in data:
@@ -107,7 +112,7 @@ def get_smallest(data)
 	fitGraph = bestFit[4]
 	return g,vi,Cd,fitGraph,idealGraph
 	
-def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
+def fit_data_advanced(screen,yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis):
 	gTemp = 9.0
 	viTemp = -0.50
 	CdTemp = 0.3
@@ -142,6 +147,7 @@ def fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,fig
 			viTemp += 0.05
 		viTemp = -0.50
 		gTemp += 0.01
+	loading_plot(screen)
 	axis = figure.gca(axisbg="0.0")
 	axis = style_axis(axis,HEIGHT_IN_METERS)
 	axis.plot(timing,yCoord,'b',label='Data',linewidth=2)
@@ -221,3 +227,8 @@ def load_results(screen, fitResults, font, data_rect, g, vi, Cd, state):
 		screen.blit(fitResults[2],(15,270))
 	
 	return screen, fitResults
+	
+def loading_plot(screen)
+	fontB = pygame.font.SysFont("sanserif",36)
+	label = font.render("CREATING PLOT",1,(255,255,255))
+	screen.blit(label,(300,220))

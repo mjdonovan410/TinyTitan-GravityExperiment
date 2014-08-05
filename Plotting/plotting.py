@@ -65,14 +65,14 @@ if rank == 0:
 				
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
+				comm.bcast(['quit',None,None],root=0)
 				pygame.quit()
 				sys.exit()
-				comm.bcast(['quit',None,None],root=0)
 			elif event.type == KEYDOWN:
 				if event.key == 27:
+					comm.bcast(['quit',None,None],root=0)
 					pygame.quit()
 					sys.exit()
-					comm.bcast(['quit',None,None],root=0)
 			elif event.type == MOUSEBUTTONDOWN:
 				x,y = event.pos
 				for i in buttons:
@@ -84,7 +84,7 @@ if rank == 0:
 					infile = askopenfilename(filetypes=[("Python Pickle","*.p")])
 					if infile != '':
 						g = 0; Cd = 0; vi = 0
-						xCoord, yCoord, timing, pxPerM, figure, axis = load_data(infile,figure,axis,HEIGHT_IN_METERS)
+						xCoord, yCoord, timing, pxPerM, figure, axis = load_data(screen,infile,figure,axis,HEIGHT_IN_METERS)
 						graph = create_graph(figure, plot_size)
 						screen.blit(graph, plot_loc)
 						screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 0)
@@ -93,7 +93,7 @@ if rank == 0:
 				elif button_str == "fit":
 					if yCoord != []:
 						comm.bcast([button_str,yCoord,timing],root=0)
-						g, vi, figure, axis = fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm)
+						g, vi, figure, axis = fit_data_basic(screen,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm)
 						graph = create_graph(figure, plot_size)
 						screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 1)
 						screen.blit(graph, plot_loc)
@@ -104,7 +104,7 @@ if rank == 0:
 					if yCoord != []:
 						mass, csArea, airD = get_constants()
 						if None not in [mass,csArea,airD]:
-							g, vi, Cd, figure, axis = fit_data_advanced(yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis)
+							g, vi, Cd, figure, axis = fit_data_advanced(screen,yCoord,timing,pxPerM,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis)
 							graph = create_graph(figure, plot_size)
 							screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 2)
 							screen.blit(graph, plot_loc)
@@ -125,7 +125,7 @@ else:
 		yCoord = data[1]
 		timing = data[2]
 		if button_str == 'fit':
-			fit_data_basic(yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm)
+			fit_data_basic(None,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm)
 		elif button_str == 'afit':
 			pass
 		elif button_str == 'quit':
