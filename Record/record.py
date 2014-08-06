@@ -1,6 +1,5 @@
 import pygame,sys,os,commands
 sys.path.insert(0, '../lib/')
-import RPi.GPIO as GPIO
 from time import sleep,strftime
 from button import *
 from pygame.locals import *
@@ -13,6 +12,7 @@ rank = comm.rank
 size = comm.size
 
 if rank == 0:
+	os.system('sudo /home/pi/PiBits/ServoBlaster/user/servod')
 	pygame.init()
 	clock = pygame.time.Clock()
 	update_rate = 20
@@ -26,16 +26,7 @@ if rank == 0:
 	buttons.append(ImgButton(screen,False,None,None,"Images/close.png","Images/close2.png","close",(240,50),(200,55)))
 	buttons.append(ImgButton(screen,False,None,None,"Images/drop.png","Images/drop2.png","drop",(125,110),(200,55)))
 
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(7,GPIO.OUT)
-	p = GPIO.PWM(7,50)
-
-	d0 = .6*100
-	d150 = 2.2*100
-	
-	dc = 20
-	p.start(d150/dc)
-	sleep(1)
+	os.system('echo 0=240 > /dev/servoblaster')
 
 	screen.blit(pygame.image.load("Images/header.png"),(0,0))
 
@@ -60,16 +51,14 @@ if rank == 0:
 					if i.mouseloc(x,y):
 						button_str = i.getactionStr()
 						if button_str == 'close':
-							p.ChangeDutyCycle(d0/dc)
-							sleep(1)
+							os.system('echo 0=50 > /dev/servoblaster')
 						elif button_str == 'open':
-							p.ChangeDutyCycle(d150/dc)
-							sleep(1)
+							os.system('echo 0=240 > /dev/servoblaster')
 		
 		if button_str == 'drop':
 			comm.send(button_str,dest=1)
 			sleep(3)
-			p.ChangeDutyCycle(d150/dc)
+			os.system('echo 0=240 > /dev/servoblaster')
 			sleep(1)
 			break
 
@@ -82,24 +71,21 @@ if rank == 0:
 	
 	p.stop()	
 	pygame.quit()
-	GPIO.cleanup()	
+	os.system('sudo killall servod')
 
 elif rank == 1:
 	flashName = ""
-	temp2 = []
-	cmdReturn = commands.getoutput("df -h")
-	temp = cmdReturn.split("\n")
+	cmdReturn = commands.getoutput("ls /media")
+	devices = cmdReturn.split("\n")
 	
-	for i in temp:
-		if "/media/" in i:
-			temp3 = i.split("/media/")
-			temp2.append(temp3[1])
-	for i in temp2:
-		if i != "SETTINGS":
+	for i in devices:
+		if i != 'SETTINGS':
 			flashName = i
-
+	
 	if flashName == "":
 		print "ERROR: NO FLASH DRIVE INSTALLED ON CAMERA PI"
+		input = comm.recv(source=0)
+		print "ERROR: NO VIDEO FILE HAS BEEN CREATED"
 	else:
 		input = comm.recv(source=0)		
 		if input == "drop":

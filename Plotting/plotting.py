@@ -87,7 +87,7 @@ if rank == 0:
 						xCoord, yCoord, timing, pxPerM, figure, axis = load_data(screen,infile,figure,axis,HEIGHT_IN_METERS)
 						graph = create_graph(figure, plot_size)
 						screen.blit(graph, plot_loc)
-						screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 0)
+						fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 0)
 						pyplot.clf()
 				
 				elif button_str == "fit":
@@ -95,7 +95,7 @@ if rank == 0:
 						comm.bcast([button_str,yCoord,timing],root=0)
 						g, vi, figure, axis = fit_data_basic(screen,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm)
 						graph = create_graph(figure, plot_size)
-						screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 1)
+						fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 1)
 						screen.blit(graph, plot_loc)
 						pyplot.ylim((0,HEIGHT_IN_METERS))
 						pyplot.clf()
@@ -107,7 +107,7 @@ if rank == 0:
 							comm.bcast([button_str,yCoord,timing,mass,csArea,airD],root=0)
 							g, vi, Cd, figure, axis = fit_data_advanced(screen,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,figure,axis,comm)
 							graph = create_graph(figure, plot_size)
-							screen,fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 2)
+							fitResults = load_results(screen, fitResults, font, data_rect, g, vi, Cd, 2)
 							screen.blit(graph, plot_loc)
 							pyplot.ylim((0,HEIGHT_IN_METERS))
 							pyplot.clf()

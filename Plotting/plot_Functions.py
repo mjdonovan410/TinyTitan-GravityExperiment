@@ -95,7 +95,7 @@ def fit_data_basic(screen,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
 		axis.plot(timing,fitGraph,'g',label='Fit',linewidth=2) 
 		axis.plot(timing,idealGraph,'r',label='Ideal',linewidth=2)
 		axis.legend()
-		return g, vi, figure, axis
+		return round(g,2), round(vi,2), figure, axis
 		
 def get_smallest(data):
 	diffTemp = 100
@@ -117,30 +117,32 @@ def fit_data_advanced(screen,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,fig
 	size = comm.size
 	name = MPI.Get_processor_name()
 	totRange = [9.0,10.5]
+	viRange = [-0.50,0.50]
+	CdRange = [0.45,0.65]
 	gStep = 0.01
 	viStep = 0.05
 	CdStep = 0.01
 	
 	gStart = floor(100*(totRange[0] + float(rank)*float((totRange[1]-totRange[0])/float(size))))/100 + 0.01
 	gStop = floor(100*(gStart + float((totRange[1]-totRange[0])/float(size))))/100 - 0.01
-	print rank, name,gStart,"--",gStop
+	print rank, name, gStart, "--", gStop
 	
 	gTemp = gStart
-	viTemp = -0.50
-	CdTemp = 0.45
-	g = 0; vi = 0; diff = 0; Cd = 0
+	viTemp = viRange[0]
+	CdTemp = CdRange[0]
+	g = 0; vi = 0; diff = 0; Cd = 0; lowestDiff = 0
 	fitGraph = []; idealGraph = []; yFit = []; temp = []
 	
 	while gTemp < gStop:
-		while viTemp < 0.50:
-			while CdTemp < .65:
+		while viTemp < viRange[1]:
+			while CdTemp < CdRange[1]:
 				for i in range(len(timing)):
 					a = math.sqrt(2*mass*gTemp/(airD*csArea*CdTemp))
 					b = math.sqrt(gTemp*airD*CdTemp*csArea/(2*mass))
 					temp.append(HEIGHT_IN_METERS - (a*math.log(math.cosh(b*timing[i])))/b - viTemp*timing[i])
 					diff += (yCoord[i]-temp[i])**2
 				yFit.append(diff)
-				if round(CdTemp,2) == 0.47 and round(gTemp,1) == 9.8 and round(viTemp,2) == 0.00:
+				if round(CdTemp,2) == 0.47 and round(gTemp,2) == 9.81 and round(viTemp,2) == 0.00:
 					idealGraph = temp
 				if diff == min(yFit):
 					yFit = []
@@ -149,12 +151,13 @@ def fit_data_advanced(screen,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,fig
 					vi = viTemp
 					fitGraph = temp
 					Cd = CdTemp
+					lowestDiff = diff
 				temp = []
 				diff = 0
 				CdTemp += CdStep
-			CdTemp = 0.45
+			CdTemp = CdRange[0]
 			viTemp += viStep
-		viTemp = -0.50
+		viTemp = viRange[0]
 		gTemp += gStep
 	data = comm.gather([g,vi,Cd,lowestDiff,fitGraph,idealGraph],root=0)
 	if rank == 0:
@@ -238,7 +241,7 @@ def load_results(screen, fitResults, font, data_rect, g, vi, Cd, state):
 		fitResults[2] = render_textrect("Cd = "+str(Cd), font, data_rect, (255,0,0), (0,0,0), justification=1)
 		screen.blit(fitResults[2],(15,270))
 	
-	return screen, fitResults
+	return fitResults
 	
 def loading_plot(screen):
 	font = pygame.font.SysFont("sanserif",48)
