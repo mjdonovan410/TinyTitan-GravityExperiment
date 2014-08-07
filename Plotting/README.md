@@ -13,7 +13,7 @@ Plotting the data is obviously where the meat of this experiment lies. Plotting 
    ```
 
 Again, with MPI, there is a lot of overhead waiting for the connections between the Pis to be made so it will take a few seconds to load. Once loaded, the GUI will pop up.  
-![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Plotting/Images/gui.png "Plotting GUI")
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Plotting/Images/gui.PNG"Plotting GUI")
 
 ------------------
 #### Recommended Instructions
@@ -28,7 +28,8 @@ Again, with MPI, there is a lot of overhead waiting for the connections between 
 The input to this program is a list of coordinates and their timing. The format is a list that looks like
 ```
 [((x1,y1),time1),...,((xN,yN),timeN)]
-```.  
+```
+ 
 It's a list of tuples with the first element being the tuple coordinates and the second element being the time at which that coordinate occurs.
 
 No output for this program outside of the final results.
