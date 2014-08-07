@@ -73,9 +73,16 @@ def fit_data_basic(screen,yCoord,timing,HEIGHT_IN_METERS,figure,axis,comm):
 	gStep = 0.01
 	viStep = 0.05
 	
-	# Using the rank and size provided from MPI, it will calculate the range that each processor will calculate
-	gStart = floor(100*(totRange[0] + float(rank)*float((totRange[1]-totRange[0])/float(size))))/100 + 0.01
-	gStop = floor(100*(gStart + float((totRange[1]-totRange[0])/float(size))))/100 - 0.01
+	# Using the rank and size provided from MPI, it will calculate the range that each processor will calculate	
+	outIter = ((totRange[1]-totRange[0])/gStep)
+	iterPerNode = floor(outIter/size)
+	mod =  outIter % size
+	if rank < mod:
+		gStart = totRange[0] + gStep*iterPerNode*rank + rank*gStep
+		gStop = totRange[0] + gStep*iterPerNode*rank + gStep*iterPerNode + rank*gStep
+	else:
+		gStart = totRange[0] + gStep*iterPerNode*rank + mod*gStep
+		gStop = totRange[0] + gStep*iterPerNode*rank + gStep*iterPerNode + (mod-1)*gStep
 	print rank, name, gStart, "--", gStop
 	
 	# Sets starting values and instantiates values for the loop
@@ -163,8 +170,15 @@ def fit_data_advanced(screen,yCoord,timing,mass,csArea,airD,HEIGHT_IN_METERS,fig
 	CdStep = 0.01
 	
 	# Using the rank and size provided from MPI, it will calculate the range that each processor will calculate
-	gStart = floor(100*(totRange[0] + float(rank)*float((totRange[1]-totRange[0])/float(size))))/100 + 0.01
-	gStop = floor(100*(gStart + float((totRange[1]-totRange[0])/float(size))))/100 - 0.01
+	outIter = ((totRange[1]-totRange[0])/gStep)
+	iterPerNode = floor(outIter/size)
+	mod =  outIter % size
+	if rank < mod:
+		gStart = totRange[0] + gStep*iterPerNode*rank + rank*gStep
+		gStop = totRange[0] + gStep*iterPerNode*rank + gStep*iterPerNode + rank*gStep
+	else:
+		gStart = totRange[0] + gStep*iterPerNode*rank + mod*gStep
+		gStop = totRange[0] + gStep*iterPerNode*rank + gStep*iterPerNode + (mod-1)*gStep
 	print rank, name, gStart, "--", gStop
 	
 	# Sets starting values and instantiates values for the loop

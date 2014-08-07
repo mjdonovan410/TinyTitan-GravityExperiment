@@ -112,7 +112,7 @@ As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love 
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/otherArm.jpg "Dependent Gear Arm")  
 5. Take the guiding arms and place the spacers in the holes on both ends. Then put them in place with the nuts and bolts. Tighten the bolts by pushing your finger on the top of the bolt and tightening with the wrench. This prevents over tightening.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/guideArms.jpg "Guide Arms")  
-6. Lastly, add the claw piece and places the nuts and bolts into the arms fastening them. Again tighten with the wrench and your finger.
+6. Lastly, add the claw piece and places the nuts and bolts into the arms fastening them. Again tighten with the wrench and your finger.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/attachClaw.jpg "Attach Claw to Arms")  
 
 The claw should be ready for dropping objects.  

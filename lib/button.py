@@ -1,9 +1,10 @@
-'''
-Author:   Matthew Donovan
-Created:  7/8/14
-File:     button.py
-Purpose:  Provide a simple way to add buttons with ease to a program
-'''	
+#------------------------------------------------------------------------------
+# Author: 	Matt Donovan
+# Provider:	Oak Ridge National Lab
+# Date: 	8/7/14
+# File:		button.py
+# Purpose:	Provide a simple way to interact with buttons in pygame
+#------------------------------------------------------------------------------
 
 import pygame, sys
 from pygame.locals import *
