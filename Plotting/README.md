@@ -13,7 +13,7 @@ Plotting the data is obviously where the meat of this experiment lies. Plotting 
    ```
 
 Again, with MPI, there is a lot of overhead waiting for the connections between the Pis to be made so it will take a few seconds to load. Once loaded, the GUI will pop up.  
-![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Plotting/Images/gui.PNG"Plotting GUI")
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Plotting/Images/gui.PNG "Plotting GUI")
 
 ------------------
 #### Recommended Instructions
