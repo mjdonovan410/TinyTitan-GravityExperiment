@@ -43,15 +43,28 @@ class ImgButton:
 			else:
 				self.picDisp = self.pic3
 				return 0
-
-	def getpicDisp(self):
+	
+	# Returns the current picture
+	def getpicDisp(self): 
 		return self.picDisp
+	
+	# Returns the string for the button
 	def getactionStr(self):
 		return self.actionStr
+	
+	# Returns the location of the button on the screen
+	def getLoc(self):
+		return self.loc
+	
+	# Returns the x location of the button on the screen
 	def getx(self):
 		return self.loc[0]
+	
+	# Returns the y location of the button on the screen
 	def gety(self):
 		return self.loc[1]
+	
+	# If the button is a toggle button, it will swap the images
 	def toggle_button(self):
 		if self.toggle:
 			if self.switch:

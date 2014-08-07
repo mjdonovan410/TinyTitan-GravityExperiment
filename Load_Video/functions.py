@@ -1,9 +1,10 @@
-'''
-Author:   Matthew Donovan
-Created:  7/8/14
-File:     functions.py
-Purpose:  Provide functions for exp.py in a way to keep the driver file less cluttered
-'''	
+#------------------------------------------------------------------------------
+# Author: 	Matt Donovan
+# Provider:	Oak Ridge National Lab
+# Date: 	8/7/14
+# File:		functions.py
+# Purpose:	Provides a list of functions to clean up the code in load_video.py
+#------------------------------------------------------------------------------
 
 import pygame, os, sys, pickle
 from pygame.locals import *
@@ -30,24 +31,25 @@ def right_key(curFrame,frame_range):
 
 # Manager for when a button is pressed and does the appropriate function
 def button_pressed(screen,curFrame,str,frame_range):
-	if str == "stepf":
+	if str == "stepf": # Move one frame forward
 		return right_key(curFrame,frame_range)
-	elif str == "stepb":
+	elif str == "stepb": # Move one frame backward
 		return left_key(curFrame,frame_range)
-	elif str == "skipf":
-		if curFrame+(FPS/4) >= frame_range[1]:
+	elif str == "skipf": # Skip forward 10 frames if possible
+		if curFrame+(10) >= frame_range[1]:
 			return frame_range[1]
 		else:
-			return curFrame+(FPS/4)
-	elif str == "skipb":
-		if curFrame-(FPS/4) <= frame_range[0]:
+			return curFrame+(10)
+	elif str == "skipb": # Skip backward 10 frames if possible
+		if curFrame-(10) <= frame_range[0]:
 			return frame_range[0]
 		else:
-			return curFrame-(FPS/4)
-	elif str == "load":
+			return curFrame-(10)
+	elif str == "load": # Loads a windows that a user can select which video file they would like to view
 		Tk().withdraw()
 		infile = askopenfilename(filetypes=[("H264 Video","*.h264")])
 		
+		# If a file has been chosen, it will clear the directory of the previous temp files, and convert the video into images
 		if infile != '':
 			cleanDir()
 			font = pygame.font.SysFont("sanserif",72)
@@ -58,8 +60,11 @@ def button_pressed(screen,curFrame,str,frame_range):
 			screen.blit(label,(310,300))
 			screen.blit(label2,(370,355))
 			pygame.display.update()
+			
+			# Creates a new folder to place the files in
 			os.system("mkdir pic_temp")
 			frames = change_vid(infile, screen, font)
+			
 			screen.blit(pygame.image.load("Images/bg.png"),(0,0))
 			screen.blit(pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png"),(0,0))
 			screen.blit(pygame.image.load("Images/pic_temp.png"),(720-(480+10),10))
@@ -72,8 +77,11 @@ def button_pressed(screen,curFrame,str,frame_range):
 # Switches out for the new video once the user selects to load another	
 def change_vid(infile, screen, font):
 	#os.system("ffmpeg -i "+infile+" -ss 00:00:08.4 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg") #Windows use only
+	
 	# The program thinks the video is at 25 FPS so 1 second at 90 FPS is 3.6 seconds at 25 FPS
 	os.system("avconv -i "+infile+" -ss 00:00:08.4 -t 00:00:03.6 -r 25 -f image2 pic_temp/%05d.jpg")
+	
+	# Collects all the files in the directory and loads them into pygame
 	path, dirs, files = os.walk("./pic_temp/").next()
 	frames = []
 	length = len(files)
@@ -83,6 +91,8 @@ def change_vid(infile, screen, font):
 	bar = pygame.image.load("Images/loading.png")
 	c = 0; v = 0
 	files.sort()
+	
+	# This loop actually loads them into pygame and adds to the loading bar
 	for i in files:
 		frames.append(pygame.image.load("./pic_temp/"+i))
 		while (v*100/length) > c:
@@ -118,7 +128,7 @@ def load_buttons(buttons, screen, screen_size):
 	buttons.append(ImgButton(screen,False,None,None,"Images/skipb.png","Images/skipb2.png","skipb",(midx-(2*gap),midy),(button_x,button_y)))
 	buttons.append(ImgButton(screen,False,None,None,"Images/start.png","Images/start2.png","start",(midx-(3*gap),midy),(button_x,button_y)))
 	buttons.append(ImgButton(screen,False,None,None,"Images/save.png","Images/save2.png","save",(15,650),(200,63)))
-	
+
 	return buttons
 
 # Updates everything on the screen (except buttons)	
@@ -133,7 +143,7 @@ def update_all(screen, screen_size, frames, frame_loc, numberBox, curFrame, font
 # Updates the buttons if they are being hovered over with the mouse	
 def update_buttons(screen, buttons):
 	for i in buttons:
-		screen.blit(i.getpicDisp(),(i.getx(),i.gety()))
+		screen.blit(i.getpicDisp(),i.getLoc())
 
 # Updates the video image and the frame number in the corner
 def update_pic(screen, screen_size, frames, frame_loc, curFrame, font):
@@ -147,7 +157,7 @@ def show_all_points(screen, keyFrames, frame_range, frame_loc, curFrame, dotR, d
 		p = keyFrames[i]
 		if p != (1000,1000):
 			temp = p
-			if i == curFrame:
+			if i == curFrame: # There is a blue dot on the current frame whereas all the rest are red dots
 				screen.blit(dotB,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
 			else:
 				screen.blit(dotR,(frame_loc[0]-5+temp[0],frame_loc[1]-5+temp[1]))
@@ -163,25 +173,32 @@ def clear_points(keyFrames):
 # Saves a file assuming that all points in the range have been selected
 def save_file(keyFrames, frame_range, curFrame, font):
 	Tk().withdraw()
+	
+	# Prompts user for what file name they would like to save their data as
 	savefile = asksaveasfilename(filetypes=[("Python Pickle","*.p")])
 	message = False
 	message_str = ""
 	message_rect = pygame.Rect((0,0), (200,150))
 	temp = []
+	
+	# If they didn't hit cancel, this checks to see if they plotted all the data points correctly
+	# If not, it will send them to the frame that they missed a data point
 	if savefile != "":
 		for i in range(frame_range[0], frame_range[1]+1):
 			p = keyFrames[i]
 			if p != (1000,1000):
 				temp.append((p,(float(i)-frame_range[0])*1/float(FPS)))
-				#print temp
 			else:
 				message_str = "Frame "+str(i)+" missing data point"
 				message = True
 				curFrame = i
 				break
-		if not message:
+		
+		if not message: # If there was no error, then it saves the data to the file
 			savefile = check_filename(savefile)
-			pickle.dump(temp,open(savefile, "wb"))
+			file = open(savefile, "wb")
+			pickle.dump(temp,file)
+			file.close()
 			message = True
 			message_str = ".p File Saved"
 	

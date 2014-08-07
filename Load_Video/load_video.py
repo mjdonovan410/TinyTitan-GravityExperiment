@@ -1,10 +1,11 @@
-'''
-Author:   Matthew Donovan
-Created:  7/8/14
-File:     exp.py
-Purpose:  Provides a service to load a video created by the raspberry pi, and convert the visuals into data points to be used
-in other programs.
-'''	
+#------------------------------------------------------------------------------
+# Author: 	Matt Donovan
+# Provider:	Oak Ridge National Lab
+# Date: 	8/7/14
+# File:		load_video.py
+# Purpose:	Provides an easy way to collect data from a H264 video file and
+#			save it for use later.
+#------------------------------------------------------------------------------
 
 import pygame, pickle, sys
 sys.path.insert(0, '../lib/')
@@ -15,7 +16,7 @@ from pygame.locals import *
 
 pygame.init()
 
-# Screen and Basic Program Variables
+# Pygame window setup and loading of images
 clock = pygame.time.Clock()
 screen_size = (720,720)
 screen = pygame.display.set_mode(screen_size)
@@ -23,14 +24,16 @@ pygame.display.set_caption("Experiment Video Loader")
 frame_range = [0,0]
 frame_size = (480,640)
 frame_loc = (screen_size[0]-(frame_size[0]+10),10)
-frames = []
-keyFrames = []
 logo = pygame.image.load("Images/ORNL_Images/ORNL_Stacked_white_banner.png")
 bg = pygame.image.load("Images/bg.png")
 pic_temp = pygame.image.load("Images/pic_temp.png")
 crosshairs = [pygame.image.load("Images/crosshairs_w.png"),pygame.image.load("Images/crosshairs_h.png")]
 dotR = pygame.image.load("Images/dotr.png").convert_alpha()
 dotB = pygame.image.load("Images/dotb.png").convert_alpha()
+
+# Variables for the program
+frames = []
+keyFrames = []
 fontB = pygame.font.SysFont("sanserif",36)
 fontL = pygame.font.SysFont("sanserif",24)
 numberBox = [None,None]
@@ -73,30 +76,30 @@ while True:
 		
 		# Keyboard shortcuts for the action buttons
 		elif event.type == KEYDOWN:
-			if event.key == K_LEFT or event.key == K_a:
+			if event.key == K_LEFT or event.key == K_a: # Moves forward one frame
 				curFrame = left_key(curFrame,frame_range)
-			elif event.key == K_RIGHT or event.key == K_d:
+			elif event.key == K_RIGHT or event.key == K_d: # Moves backward one frame
 				curFrame = right_key(curFrame,frame_range)
-			elif event.key == K_s:
+			elif event.key == K_s: # Sets the Start frame for the video
 				frame_range[0] = curFrame
 				button_str = "set_start"
-			elif event.key == K_f:
+			elif event.key == K_f: # Sets the End frame for the video
 				frame_range[1] = curFrame
 				button_str = "set_end"
-			elif event.key == K_c:
+			elif event.key == K_c: # Resets the Start and End frames
 				frame_range = [0,len(frames)-1]
 				button_str = "reset"
-			elif event.key == 27:
+			elif event.key == 27: # Quits the program if ESC is hit
 				exitAndClean()
-			elif event.key == K_q:
+			elif event.key == K_q: # Skips backward 10 frames
 				curFrame = button_pressed(screen,curFrame,"skipb",frame_range)
-			elif event.key == K_e:
+			elif event.key == K_e: # Skips forward 10 frames
 				curFrame = button_pressed(screen,curFrame,"skipf",frame_range)
 				
 		# Used for both buttons being pressed or location of a data point
 		elif event.type == MOUSEBUTTONDOWN:
 			x,y = event.pos
-			if mouseOnPic and frames != []:
+			if mouseOnPic and frames != []: # If the mouse is on the picture, it will record its coordinates
 				keyFrames[curFrame] = (x-screen_size[0]+(frame_size[0]+13),y-8)
 			else:
 				#Checks if a button has been pressed
@@ -110,9 +113,11 @@ while True:
 							if temp is not None:
 								frames = temp
 								frame_range = [0,len(frames)-1]
-								keyFrames = []
 								numberBox[0] = render_textrect(str(frame_range[0]), fontB, number_rect, (255,255,255), (0,0,0), justification=1)
 								numberBox[1] = render_textrect(str(frame_range[1]), fontB, number_rect, (255,255,255), (0,0,0), justification=1)
+								
+								# Resets all the clicked points to something that isn't possible
+								keyFrames = []
 								for p in range(len(frames)):
 									keyFrames.append((1000,1000))
 								update_all(screen, screen_size, frames, frame_loc, numberBox, curFrame, fontB)
