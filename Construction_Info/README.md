@@ -126,7 +126,7 @@ The Pi case is potentially going to change for Tiny Titan, and it will be setup 
 To mount them, take one of the 80/20 screws and place it into the cross shaped hole near the USB connection. The screw is slightly too big so you will need to turn the screw to get it in. Once through, place on the T-Nut and slide it onto the 80/20 and tighten. Place a piece of electrical tape over the screw so the Pi doesn't short itself out. Then simple put the Pis in until it clicks.  
 
 *Unfortunately, you cannot place another screw in because the SD Card slot is in the way*   
-![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountingPis.jpg "Mounting the Pis")  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountPis.jpg "Mounting the Pis")  
 
 ##### Claw
 The claw, at this point, should be full assembled using the instructions above. Take two of the extra 80/20 screws from the earlier construction and place them into the two holes of the claw. Take two of the T-Nuts and place them on the bolts. Slide it into place and tighten the screws the rest of the way.
