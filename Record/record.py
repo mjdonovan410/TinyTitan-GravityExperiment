@@ -16,8 +16,8 @@ from mpi4py import MPI
 # References the MPI link between the two Pis
 comm = MPI.COMM_WORLD
 rank = comm.rank
+size = comm.size
 #name = MPI.Get_processor_name()
-#size = comm.size
 
 # If it is the first Pi on the list in nodes.txt, it will control the servo and GUI. If it is the second, it will wait until the the first Pi tells it to record.
 if rank == 0:
@@ -50,7 +50,8 @@ if rank == 0:
 		for event in pygame.event.get():
 			# Quits if the 'X' in the corner has been pressed
 			if event.type == QUIT:
-				comm.send("quit",dest=1)
+				if size < 1:
+					comm.send("quit",dest=1)
 				pygame.quit()
 				sys.exit()
 			elif event.type == KEYDOWN:
@@ -63,7 +64,8 @@ if rank == 0:
 					os.system('echo 0=50 > /dev/servoblaster')
 					sleep(0.1)
 				elif event.key == 27: # Quits if ESC is pressed
-					comm.send("quit",dest=1)
+					if size < 1:
+						comm.send("quit",dest=1)
 					pygame.quit()
 					sys.exit()
 			elif event.type == MOUSEBUTTONDOWN:
@@ -79,7 +81,8 @@ if rank == 0:
 		# This sends a command to the camera to start recording for 3 secs then the claw will open.
 		# This helps the camera warm up so it can record 90 FPS.
 		if button_str == 'drop':
-			comm.send(button_str,dest=1)
+			if size < 1
+				comm.send(button_str,dest=1)
 			sleep(3)
 			os.system('echo 0=240 > /dev/servoblaster')
 			sleep(1)
@@ -92,11 +95,10 @@ if rank == 0:
 		pygame.display.update()
 		button_str = ""
 		clock.tick(update_rate)	
-	
-	p.stop()	
+		
 	pygame.quit()
 	os.system('sudo killall servod') # Turns off the ServoBlaster driver
-elif rank == 1:
+else:
 	flashName = ""
 	
 	# Checks the media folder to see if a flash drive is plugged in

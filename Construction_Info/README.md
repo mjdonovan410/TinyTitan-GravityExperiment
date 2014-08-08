@@ -117,3 +117,28 @@ As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love 
 
 The claw should be ready for dropping objects.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/finishedClaw.jpg "Finished Claw") 
+
+-------
+#### Mounting Parts
+##### Pi Cases
+The Pi case is potentially going to change for Tiny Titan, and it will be setup so it can mount straight to the 80/20. Currently, it does not so extra cases will be required to mount it. The one we used is on [Amazon](http://www.amazon.com/SB-Raspberry-Pi-Case-Clear/dp/B008TCUXLW/ref=sr_1_1?ie=UTF8&qid=1407522109&sr=8-1&keywords=clear+raspberry+pi+case) for roughly $7 and we required 2 of them. 
+
+To mount them, take one of the 80/20 screws and place it into the cross shaped hole near the USB connection. The screw is slightly too big so you will need to turn the screw to get it in. Once through, place on the T-Nut and slide it onto the 80/20 and tighten. Place a piece of electrical tape over the screw so the Pi doesn't short itself out. Then simple put the Pis in until it clicks.  
+
+*Unfortunately, you cannot place another screw in because the SD Card slot is in the way*   
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountingPis.jpg "Mounting the Pis")  
+
+##### Claw
+The claw, at this point, should be full assembled using the instructions above. Take two of the extra 80/20 screws from the earlier construction and place them into the two holes of the claw. Take two of the T-Nuts and place them on the bolts. Slide it into place and tighten the screws the rest of the way.
+
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountClaw.jpg "Mounting the Claw")  
+
+##### Pi Camera
+The 3D printed part of the camera is located in the `3D Print Files` folder. It isn't anything special. We actually took this premade case on [Thingiverse](http://www.thingiverse.com/thing:158664) and added an extension onto it to work with the 80/20.
+
+Once printed, take the Pi camera and place it onto the 4 pegs. Place the cover over the Pi camera and glue the edges shut.  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/piCamera.jpg "Camera Setup")  
+
+Place 2 screws into the holes and place the the T-Nuts on the back side of the mount. Slide it into the 80/20 on the smaller frame and then tighten the screws.  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountCamera.jpg "Mounting the Camera")  
+![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountedCamera.jpg "Mounted Camera")  

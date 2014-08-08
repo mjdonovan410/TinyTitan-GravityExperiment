@@ -7,7 +7,8 @@ Plotting the data is obviously where the meat of this experiment lies. Plotting 
 #### Setup
 1. Connect all the Raspberry Pis together or reassemble Tiny Titan (Whichever is easier).
 2. Make sure all the Pis can see each other. `$ ping pi#` (# being replaced with each pi's number)
-3. It can be started from the root directory by running `./plot_data.sh #` (# is replaced with the number of processor to be used), or from the `Plotting` folder:  
+3. For the Pis that you want to use, make sure you add them to the `nodes.txt` file located in the plotting directory. Type their IP addresses making sure the first one is the node that will display the program.
+4. It can be started from the root directory by running `./plot_data.sh #` (# is replaced with the number of processor to be used), or from the `Plotting` folder:  
    ```
    mpirun -np # ./nodes.txt python plotting.py
    ```
