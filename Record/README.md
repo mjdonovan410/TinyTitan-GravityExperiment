@@ -37,6 +37,8 @@ Once nothing is obstructing the camera's view, press the `Drop` button. There wi
 
 The recording will be saved on the flash drive **NOT the SD card**, so make sure there is a flash drive plugged into the camera Pi. The program will only save the file if there is a flash drive plugged in.
 
+**If the servo is very twitchy in it's movement, restart the program.** The driver tends to fail on its first attempt to load.
+
 -------
 #### Inputs and Outputs
 No inputs are require for this part of the experiment.  
