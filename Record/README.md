@@ -57,7 +57,8 @@ Then every time you want to control the servo, you'll need to run `sudo ./servod
 
 ```
 echo [Servo]=[Angle] > /dev/servoblaster
-``` *without the brackets on servo or angle*.  
+```   
+*without the brackets on servo or angle*.  
 
 The way ServoBlaster is setup, pin 7 on the GPIO is actually servo 0, so for simplicity, I would recommend using pin 7 for the yellow connector. Thus the command would change to  
 `echo 0=[Angle] > /dev/servoblaster`.
