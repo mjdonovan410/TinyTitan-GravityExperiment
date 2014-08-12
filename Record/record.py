@@ -64,7 +64,7 @@ if rank == 0:
 					os.system('echo 0=50 > /dev/servoblaster')
 					sleep(0.1)
 				elif event.key == 27: # Quits if ESC is pressed
-					if size < 1:
+					if size > 1:
 						comm.send("quit",dest=1)
 					pygame.quit()
 					sys.exit()
@@ -81,7 +81,7 @@ if rank == 0:
 		# This sends a command to the camera to start recording for 3 secs then the claw will open.
 		# This helps the camera warm up so it can record 90 FPS.
 		if button_str == 'drop':
-			if size < 1
+			if size > 1:
 				comm.send(button_str,dest=1)
 			sleep(3)
 			os.system('echo 0=240 > /dev/servoblaster')
