@@ -43,7 +43,7 @@ The recording will be saved on the flash drive **NOT the SD card**, so make sure
 #### Inputs and Outputs
 No inputs are require for this part of the experiment.  
 
-To control the servo, we used ServoBlaster. The installation for ServoBlaster is terribly documented as it has changed several times over the years. To install ServoBlaster, type:  
+To control the servo, we used ServoBlaster. The installation for ServoBlaster has changed over the past several years, thus it is hard to find the correct instructions. To install ServoBlaster, type:  
 
 ```
 $ git clone https://github.com/richardghirst/PiBits.git
@@ -67,7 +67,7 @@ The way ServoBlaster is setup, pin 7 on the GPIO is actually servo 0, so for sim
 
 The 2 Pis talk to each other using mpi4py. The claw Pi will send a signal to the camera Pi and will run this command:  
 ```
-raspivid -fps 90 -h 640 -w 480 -t 3000 -o /media/FLASH_DRIVE_NAME/vid.h264
+raspivid -fps 90 -h 640 -w 480 -t 4000 -o /media/FLASH_DRIVE_NAME/vid.h264
 ```  
 
-The video is 3s long, but only the last second of video is converted. The camera takes about two seconds to be able to match the requested 90FPS. The video records to the flash drive because it has a faster write speed than the SD card, thus can reach 90FPS.
+The video is 4s long, but only the last second of video is converted. The camera takes about three seconds to be able to match the requested 90FPS. The video records to the flash drive because it has a faster write speed than the SD card, thus can reach 90FPS.

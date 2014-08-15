@@ -4,6 +4,8 @@ This apparatus is built with a mixture of 80/20 and some material from the hardw
 ------
 #### Parts for Frames
 ##### 80/20 Extrusion  
+We ordered from a local distributor through the [80/20 Website](http://www.8020.net/)  
+
 |Part # | Quantity | Name                         | 
 |:-----:|:--------:|------------------------------|
 | 1010  |  3       | 1' 10 Series T-Slot          |
@@ -22,6 +24,8 @@ This apparatus is built with a mixture of 80/20 and some material from the hardw
 *End caps are not necessary, and they hardly stay on.*
 
 ##### Hardware Store  
+I bought all this stuff at Home Depot but any local hardware store should have these materials.  
+
 | Quantity | Part                        |
 |:--------:|-----------------------------|
 | 6        | 1/4" x 2" Eye Bolts         |
@@ -65,14 +69,14 @@ This apparatus is built with a mixture of 80/20 and some material from the hardw
 
     *I added the T-Nut to the bolt before I slid it into the slot as seen in the first image. It's not necessary, but it cuts out a step.*
 
-9. Following the same process as above, take the last two eye bolts and place them roughly 2/3rd up the center pole in the slot where the plates mounted. **Likely will require a readjustment later.**  
+9. Following the same process as above, take the last two eye bolts and place them roughly 2/3rd up the center pole in the slot where the plates mounted. **These eye bolts will need to be adjusted when the wire is threaded through**  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/eyeBolts2.jpg "Adding Eye Bolts on Pole")   
 10. Take one of your fastener (whether it be a carabiner or s-hook) and attach it to one of the eye bolts and the other end of the fastener with the loop in the cable. Then feed the other end of the cable through the center eye bolt and back down to the eye bolt parallel to its anchor. Loosen both ends of your turnbuckle all the way so it is full extended and connect the hanging wire to the turnbuckle, then the turnbuckle to the eye bolt. Don't tighten turnbuckle yet. If the turnbuckle cannot reach the eye bolt or there is too much slack, pull the wire out of the middle and adjust accordingly then try again.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/wireAdjust.jpg "Adding wire to Frame")    
 
     *The Home Depot I went to was stripped of the double hook turnbuckles so I had to get the one with one hook and got an extra S-hook to attach the wire, but otherwise, the wire connects directly to the turnbuckle.*
  
-11. Repeat step 10 for other side of post. Once completed, tighten the turnbuckle on each side. Do a little at a time on both sides to make sure the vertical pole isn't being pulled a certain direction. Tighten to the point where the corners start to bow upward and then loosen until they return back flush to the floor. Over-tightening can cause rocking and potentially bend or break the extrusion.  
+11. Repeat step 10 for other side of post. Once completed, tighten the turnbuckle on each side. Do a little at a time on both sides to make sure the vertical pole isn't being pulled a certain direction. Tighten to the point where the corners start to bow upward and then loosen until they return back flush to the floor. **Over-tightening can cause rocking and potentially bend or break the extrusion.**  
 
 The first part is complete and should be quite stable. This piece will hold the claw that will drop the ball. Now, it is time to build the stand to hold the camera.
 
@@ -91,7 +95,7 @@ Everything should be properly assembled at this point and ready for the Pis, the
 #### Claw Assembly
 This part of the Assembly is where students can get involved. We have developed a claw to work for this experiment but any claw developed could work. It would be interesting to make it a project and then choose the best one.
 
-As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love and Josh Reed. The files needed are in the folder named `3D Print Files`. 
+As for this experiment, we do have a claw thanks to the work of Dr. Lonnie Love and Josh Reed. The files needed are in the folder named [`3D Print Files`](https://github.com/mjdonovan410/TinyTitan-GravityExperiment/tree/master/Construction_Info/3D%20Print%20Files). 
 
 ##### Hardware for Claw  
 | Quantity | Part                        |
@@ -134,7 +138,7 @@ The claw, at this point, should be full assembled using the instructions above. 
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/mountClaw.jpg "Mounting the Claw")  
 
 ##### Pi Camera
-The 3D printed part of the camera is located in the `3D Print Files` folder. It isn't anything special. We actually took this premade case on [Thingiverse](http://www.thingiverse.com/thing:158664) and added an extension onto it to work with the 80/20.
+The 3D printed part of the camera is located in the [`3D Print Files`](https://github.com/mjdonovan410/TinyTitan-GravityExperiment/tree/master/Construction_Info/3D%20Print%20Files) folder. It isn't anything special. We actually took this premade case on [Thingiverse](http://www.thingiverse.com/thing:158664) and added an extension onto it to work with the 80/20.
 
 Once printed, take the Pi camera and place it onto the 4 pegs. Place the cover over the Pi camera and glue the edges shut.  
 ![alt text](https://github.com/mjdonovan410/TinyTitan-PhysicsExperiment/raw/master/Construction_Info/Images/piCamera.jpg "Camera Setup")  

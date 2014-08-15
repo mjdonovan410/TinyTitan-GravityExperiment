@@ -17,25 +17,26 @@ Each folder has a separate README file explaining each program and how to proper
 make running in terminal simpler.
 
 ------------
-#### Software Dependencies
+#### Software Dependencies  
+If the Pis were setup using [TinySetup](https://github.com/TinyTitan/TinySetup), then these are already installed and ready to go.  
 ##### Python  
 * pygame  
 * mpi4py  
 * matplotlib   
 * six  
-* parsing  
 * dateutil  
 
 ##### Other  
 * libav-tools
+* ServoBlaster  
 
 -----------
 #### Hardware Dependencies
 
-* *Tiny Titan Recording Apparatus*  (See `Construction_Info` for details)
+* *Tiny Titan Recording Apparatus* (See [`Construction_Info`](https://github.com/mjdonovan410/TinyTitan-GravityExperiment/tree/master/Construction_Info) for details)
 * *Tiny Titan* (recommended) **OR** 2 Raspberry Pi's and Powerful Linux Desktop  
 * Pi Camera  
-* Claw with Servo  
+* Claw with Servo (See [`Construction_Info`](https://github.com/mjdonovan410/TinyTitan-GravityExperiment/tree/master/Construction_Info) for details)  
 * 3 GPIO Jumper Wires  
 * 10' Ethernet Cable  
 * Flash Drive (Most sizes will suffice)  
