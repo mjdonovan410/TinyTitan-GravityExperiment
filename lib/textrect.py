@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Author: David Clark (da_clark at shaw.ca)
 Submission date: May 23, 2001
